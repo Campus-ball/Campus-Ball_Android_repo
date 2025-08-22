@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -14,9 +16,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.rememberNavController
+import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.navigation.BottomNavItem
 import com.konkuk.summerhackathon.presentation.navigation.MainNavGraph
 import com.konkuk.summerhackathon.presentation.navigation.Route
@@ -31,41 +35,43 @@ class MainActivity : ComponentActivity() {
         setContent {
             SummerHackathonTheme {
                 val navController = rememberNavController()
-                var selectedRoute by remember { mutableStateOf(Route.Home.route) }
+                var selectedRoute by remember { mutableStateOf(Route.Match.route) }
 
                 val bottomNavItems = listOf(
-                    BottomNavItem("홈", Route.Home.route, R.drawable.ic_home),
-                    BottomNavItem("마이페이지", Route.My.route, R.drawable.ic_my)
+                    BottomNavItem("일정", Route.Schedule.route, R.drawable.ic_home),
+                    BottomNavItem("동아리 조회", Route.ClubLookUp.route, R.drawable.ic_home),
+                    BottomNavItem("매칭", Route.Match.route, R.drawable.ic_home),
+                    BottomNavItem("제안 확인", Route.Proposal.route, R.drawable.ic_home),
+                    BottomNavItem("설정", Route.Settings.route, R.drawable.ic_home)
                 )
 
                 Scaffold(
                     bottomBar = {
                         NavigationBar {
                             bottomNavItems.forEach { item ->
-                                NavigationBarItem(
-                                    selected = selectedRoute == item.route,
-                                    onClick = {
-                                        selectedRoute = item.route
-                                        navController.navigate(item.route) {
-                                            launchSingleTop = true
-                                            restoreState = true
-                                            popUpTo(navController.graph.startDestinationId) {
-                                                saveState = true
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .noRippleClickable {
+                                            selectedRoute = item.route
+                                            navController.navigate(item.route) {
+                                                launchSingleTop = true
+                                                restoreState = true
+                                                popUpTo(navController.graph.startDestinationId) {
+                                                    saveState = true
+                                                }
                                             }
-                                        }
-                                    },
-                                    icon = {
+                                        },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         Icon(
                                             painter = painterResource(id = item.icon),
                                             contentDescription = item.label
                                         )
-                                    },
-                                    label = {
-                                        Text(
-                                            text = item.label
-                                        )
+                                        Text(text = item.label)
                                     }
-                                )
+                                }
                             }
                         }
                     }
