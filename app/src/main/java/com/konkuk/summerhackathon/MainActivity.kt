@@ -4,9 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -19,12 +22,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.navigation.BottomNavItem
 import com.konkuk.summerhackathon.presentation.navigation.MainNavGraph
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme
+import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
+import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,27 +45,44 @@ class MainActivity : ComponentActivity() {
                 var selectedRoute by remember { mutableStateOf(Route.Match.route) }
 
                 val bottomNavItems = listOf(
-                    BottomNavItem("일정", Route.Schedule.route, R.drawable.ic_home),
-                    BottomNavItem("동아리 조회", Route.ClubLookUp.route, R.drawable.ic_home),
-                    BottomNavItem("매칭", Route.Match.route, R.drawable.ic_home),
-                    BottomNavItem("제안 확인", Route.Proposal.route, R.drawable.ic_home),
-                    BottomNavItem("설정", Route.Settings.route, R.drawable.ic_home)
+                    BottomNavItem("일정", Route.Schedule.route, R.drawable.ic_schedule_un),
+                    BottomNavItem("동아리 조회", Route.ClubLookUp.route, R.drawable.ic_clublookup_un),
+                    BottomNavItem("매칭", Route.Match.route, R.drawable.ic_match_un),
+                    BottomNavItem("제안 확인", Route.Proposal.route, R.drawable.ic_proposal_un),
+                    BottomNavItem("설정", Route.Settings.route, R.drawable.ic_settings_un)
                 )
 
                 Scaffold(
                     bottomBar = {
-                        NavigationBar {
+                        NavigationBar(
+                            containerColor = colors.white,
+                            tonalElevation = 0.dp,
+                        ) {
                             bottomNavItems.forEach { item ->
+                                val selected = selectedRoute == item.route
+
+                                val iconRes = when (item.route) {
+                                    Route.Schedule.route -> if (selected) R.drawable.ic_schedule else item.icon
+                                    Route.ClubLookUp.route -> if (selected) R.drawable.ic_clublookup else item.icon
+                                    Route.Match.route -> if (selected) R.drawable.ic_match else item.icon
+                                    Route.Proposal.route -> if (selected) R.drawable.ic_proposal else item.icon
+                                    Route.Settings.route -> if (selected) R.drawable.ic_settings else item.icon
+                                    else -> item.icon
+                                }
+
                                 Box(
                                     modifier = Modifier
+                                        .background(colors.white)
                                         .weight(1f)
                                         .noRippleClickable {
-                                            selectedRoute = item.route
-                                            navController.navigate(item.route) {
-                                                launchSingleTop = true
-                                                restoreState = true
-                                                popUpTo(navController.graph.startDestinationId) {
-                                                    saveState = true
+                                            if (!selected) {
+                                                selectedRoute = item.route
+                                                navController.navigate(item.route) {
+                                                    launchSingleTop = true
+                                                    restoreState = true
+                                                    popUpTo(navController.graph.startDestinationId) {
+                                                        saveState = true
+                                                    }
                                                 }
                                             }
                                         },
@@ -66,10 +90,18 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         Icon(
-                                            painter = painterResource(id = item.icon),
-                                            contentDescription = item.label
+                                            modifier = Modifier.size(24.dp),
+                                            painter = painterResource(id = iconRes),
+                                            contentDescription = item.label,
+                                            tint = androidx.compose.ui.graphics.Color.Unspecified
                                         )
-                                        Text(text = item.label)
+                                        Spacer(modifier = Modifier.padding(8.dp))
+                                        Text(
+                                            text = item.label,
+                                            color = if (selected) colors.black
+                                            else colors.lightgray,
+                                            style = typography.M_8.copy(fontSize = 10.sp)
+                                        )
                                     }
                                 }
                             }
