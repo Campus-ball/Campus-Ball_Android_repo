@@ -34,11 +34,11 @@ import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 @Composable
 fun ClubLookUpCard(
     modifier: Modifier = Modifier,
-    clubName: String,
+    clubName: String = "동아리 이름",
     clubIcon: Int = R.drawable.ic_launcher_background,
-    universityAndMajor: String,
-    onAccept: () -> Unit,
-    onDecline: () -> Unit,
+    universityAndMajor: String = "OO대학교 OOO학과",
+    onAccept: () -> Unit = {},
+    onDecline: () -> Unit = {},
     isRandomMatching: Boolean = false,
 ) {
     val noticeColor =
@@ -99,13 +99,14 @@ fun ClubLookUpCard(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .height(21.dp)
+                                    .height(22.dp)
                                     .widthIn(min = 75.dp)
                                     .clickable {
                                         onAccept()
                                     }
+                                    .clip(RoundedCornerShape(20.dp))
                                     .background(
-                                        defaultCampusBallColors.skyblue,
+                                        Color(0xFF258FFF),
                                         RoundedCornerShape(20.dp)
                                     )
                             ) {
@@ -124,6 +125,7 @@ fun ClubLookUpCard(
                                     .clickable {
                                         onDecline()
                                     }
+                                    .clip(RoundedCornerShape(20.dp))
                                     .background(
                                         defaultCampusBallColors.salmon,
                                         RoundedCornerShape(20.dp)
