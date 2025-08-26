@@ -45,7 +45,6 @@ fun SignUpScreen(
             .fillMaxSize()
             .background(colors.white)
             .padding(horizontal = 21.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(21.dp))
         Box(

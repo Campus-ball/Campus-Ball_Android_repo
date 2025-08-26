@@ -1,9 +1,14 @@
 package com.konkuk.summerhackathon.presentation.auth.component
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -11,9 +16,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
+import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
+import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
 data class LeaderSignUpData(
     val name: String,
@@ -41,7 +48,6 @@ object SignUpValidators {
     }
 }
 
-// ===== 폼 =====
 @Composable
 fun LeaderForm(
     modifier: Modifier = Modifier,
@@ -71,14 +77,17 @@ fun LeaderForm(
     var pwConfirm by rememberSaveable { mutableStateOf("") }
     var isPwValid by rememberSaveable { mutableStateOf(false) }
 
+    var contact by rememberSaveable { mutableStateOf<String?>(null) }
+
+    var clubName by rememberSaveable { mutableStateOf<String?>(null) }
+
+    var clubIntro by rememberSaveable { mutableStateOf("") }
+
     var university by rememberSaveable { mutableStateOf(universities.first()) }
     var department by rememberSaveable { mutableStateOf(departmentsMap[universities.first()]!!.first()) }
 
-    var contact by rememberSaveable { mutableStateOf<String?>(null) }
-    var clubName by rememberSaveable { mutableStateOf<String?>(null) }
-    var clubIntro by rememberSaveable { mutableStateOf("") }
-
     var clubLogoUriStr by rememberSaveable { mutableStateOf<String?>(null) }
+
     var kakaoOpenChatLink by rememberSaveable { mutableStateOf<String?>(null) }
 
     val deptOptions = departmentsMap[university].orEmpty()
@@ -104,115 +113,162 @@ fun LeaderForm(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(horizontal = 20.dp),
     ) {
-        FormActionButton(
-            text = "확인",
-            enabled = isFormValid,
-            onClick = {
-                val data = LeaderSignUpData(
-                    name = name,
-                    nickname = nicknameConfirmed!!,
-                    gender = gender,
-                    userId = userId,
-                    password = password,
-                    contact = contact!!,
-                    clubName = clubName!!,
-                    clubIntro = clubIntro,
-                    university = university,
-                    department = department,
-                    clubLogoUri = clubLogoUriStr,
-                    kakaoOpenChatLink = kakaoOpenChatLink!!
+        Spacer(modifier = Modifier.padding(top = 17.dp))
+        Box(
+            contentAlignment = Alignment.CenterEnd,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            FormActionButton(
+                text = "확인",
+                enabled = isFormValid,
+                onClick = {
+                    val data = LeaderSignUpData(
+                        name = name,
+                        nickname = nicknameConfirmed!!,
+                        gender = gender,
+                        userId = userId,
+                        password = password,
+                        contact = contact!!,
+                        clubName = clubName!!,
+                        clubIntro = clubIntro,
+                        university = university,
+                        department = department,
+                        clubLogoUri = clubLogoUriStr,
+                        kakaoOpenChatLink = kakaoOpenChatLink!!
+                    )
+                    onSubmit(data)
+                },
+                modifier = Modifier,
+                missingReasons = blockers
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "회원정보",
+                    style = typography.SB_16,
+                    color = colors.black
                 )
-                onSubmit(data)
-            },
-            modifier = Modifier,
-            missingReasons = blockers
-        )
+            }
 
-        NameTextField(
-            value = name,
-            onValueChange = { name = it }
-        )
+            Spacer(modifier = Modifier.height(18.dp))
+            NameTextField(
+                value = name,
+                onValueChange = { name = it }
+            )
 
-        DuplicateTextField(
-            title = "닉네임",
-            placeholder = "닉네임을 입력하세요",
-            text = nicknameInput,
-            onTextChange = { nicknameInput = it },
-            onConfirmed = { confirmed -> nicknameConfirmed = confirmed },
-            dummyTakenNicknames = setOf("배고픈 하마"),
-            error = "닉네임 중복 입니다"
-        )
+            Spacer(modifier = Modifier.height(6.dp))
+            DuplicateTextField(
+                title = "닉네임",
+                placeholder = "닉네임을 입력하세요",
+                text = nicknameInput,
+                onTextChange = { nicknameInput = it },
+                onConfirmed = { confirmed -> nicknameConfirmed = confirmed },
+                dummyTakenNicknames = setOf("배고픈 하마"),
+                error = "닉네임 중복 입니다"
+            )
 
-        DuplicateTextField(
-            title = "아이디",
-            placeholder = "아이디를 입력하세요",
-            text = userId,
-            onTextChange = { userId = it },
-            onConfirmed = { confirmed -> userIdConfirmed = confirmed },
-            dummyTakenNicknames = setOf("hungry"),
-            error = "아이디 중복 입니다"
-        )
+            Spacer(modifier = Modifier.height(6.dp))
+            GenderSegmentedField(
+                selected = gender,
+                onSelect = { gender = it }
+            )
 
-        PasswordFields(
-            password = password,
-            onPasswordChange = { password = it },
-            confirmPassword = pwConfirm,
-            onConfirmPasswordChange = { pwConfirm = it },
-            onValidityChange = { isPwValid = it }
-        )
+            Spacer(modifier = Modifier.height(16.dp))
+            DuplicateTextField(
+                title = "아이디",
+                placeholder = "아이디를 입력하세요",
+                text = userId,
+                onTextChange = { userId = it },
+                onConfirmed = { confirmed -> userIdConfirmed = confirmed },
+                dummyTakenNicknames = setOf("hungry"),
+                error = "아이디 중복 입니다"
+            )
 
-        SearchDropdownChipField(
-            label = "소속 대학",
-            selected = university,
-            options = universities,
-            onSelected = { university = it }
-        )
+            Spacer(modifier = Modifier.height(6.dp))
+            PasswordFields(
+                password = password,
+                onPasswordChange = { password = it },
+                confirmPassword = pwConfirm,
+                onConfirmPasswordChange = { pwConfirm = it },
+                onValidityChange = { isPwValid = it }
+            )
 
-        SearchDropdownChipField(
-            label = "소속 학과",
-            placeholder = "학과 검색…",
-            selected = department,
-            options = deptOptions,
-            onSelected = { department = it }
-        )
+            Spacer(modifier = Modifier.height(16.dp))
+            RequiredTextField(
+                label = "연락처",
+                value = contact,
+                onValueChange = { contact = it },
+                placeholder = "연락처를 입력하세요"
+            )
 
-        GenderSegmentedField(
-            selected = gender,
-            onSelect = { gender = it }
-        )
+            Spacer(modifier = Modifier.height(18.dp))
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "동아리정보",
+                    style = typography.SB_16,
+                    color = colors.black
+                )
+            }
 
-        IntroTextArea(
-            value = clubIntro,
-            onValueChange = { clubIntro = it }
-        )
+            Spacer(modifier = Modifier.height(20.dp))
+            RequiredTextField(
+                label = "동아리명",
+                value = clubName,
+                onValueChange = { clubName = it },
+                placeholder = "동아리명을 입력하세요"
+            )
 
-        LogoPickerField(
-            value = clubLogoUriStr,
-            onValueChange = { clubLogoUriStr = it }
-        )
+            Spacer(modifier = Modifier.height(16.dp))
+            IntroTextArea(
+                value = clubIntro,
+                onValueChange = { clubIntro = it }
+            )
 
-        RequiredTextField(
-            label = "동아리명",
-            value = clubName,
-            onValueChange = { clubName = it },
-            placeholder = "동아리명을 입력하세요"
-        )
+            Spacer(modifier = Modifier.height(6.dp))
+            SearchDropdownChipField(
+                label = "소속 대학",
+                selected = university,
+                options = universities,
+                onSelected = { university = it }
+            )
 
-        RequiredTextField(
-            label = "연락처",
-            value = contact,
-            onValueChange = { contact = it },
-            placeholder = "연락처를 입력하세요"
-        )
+            Spacer(modifier = Modifier.height(16.dp))
+            SearchDropdownChipField(
+                label = "소속 학과",
+                placeholder = "학과 검색…",
+                selected = department,
+                options = deptOptions,
+                onSelected = { department = it }
+            )
 
-        RequiredTextField(
-            label = "카카오톡 오픈채팅",
-            value = kakaoOpenChatLink,
-            onValueChange = { kakaoOpenChatLink = it },
-            placeholder = "카카오톡 오픈채팅 링크를 입력하세요"
-        )
+            Spacer(modifier = Modifier.height(16.dp))
+            LogoPickerField(
+                value = clubLogoUriStr,
+                onValueChange = { clubLogoUriStr = it }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            RequiredTextField(
+                label = "카카오톡 오픈채팅",
+                value = kakaoOpenChatLink,
+                onValueChange = { kakaoOpenChatLink = it },
+                placeholder = "카카오톡 오픈채팅 링크를 입력하세요"
+            )
+        }
     }
 }
