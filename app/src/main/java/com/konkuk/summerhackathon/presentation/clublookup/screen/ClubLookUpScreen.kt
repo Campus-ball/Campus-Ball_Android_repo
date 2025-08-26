@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.konkuk.summerhackathon.presentation.clublookup.component.CampusBallTopBar
 import com.konkuk.summerhackathon.presentation.clublookup.component.ClubLookUpCard
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
@@ -43,14 +44,12 @@ fun ClubLookUpScreen(
                     )
                 )
             ),
-    )
-    {
+    ) {
         Column(
             Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-//            Spacer(Modifier.fillMaxWidth().height(52.dp).background(color = defaultCampusBallColors.skyblue))
-            // TODO: 여기 상단 로고/일러스트 배치
+            CampusBallTopBar()
 
             Spacer(Modifier.height(66.dp))
 
