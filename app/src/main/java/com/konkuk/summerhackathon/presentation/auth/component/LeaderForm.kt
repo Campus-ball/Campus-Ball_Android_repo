@@ -19,6 +19,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
@@ -51,7 +53,8 @@ object SignUpValidators {
 @Composable
 fun LeaderForm(
     modifier: Modifier = Modifier,
-    onSubmit: (LeaderSignUpData) -> Unit = {}
+    onSubmit: (LeaderSignUpData) -> Unit = {},
+    navController: NavHostController
 ) {
     val universities = listOf("건국대학교", "서울대학교", "연세대학교", "고려대학교", "성균관대학교")
     val departmentsMap = mapOf(
@@ -139,6 +142,11 @@ fun LeaderForm(
                         kakaoOpenChatLink = kakaoOpenChatLink!!
                     )
                     onSubmit(data)
+                    navController.navigate(Route.Login.route) {
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                        restoreState = false
+                    }
                 },
                 modifier = Modifier,
                 missingReasons = blockers
