@@ -1,5 +1,6 @@
-package com.konkuk.summerhackathon.presentation.clublookup.component
+package com.konkuk.summerhackathon.presentation.schedule.component
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,27 +24,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.util.noRippleClickable
-import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
-import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
+import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
+import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
 @Composable
-fun ClubLookUpCard(
+fun ScheduleClubCard(
     modifier: Modifier = Modifier,
     clubName: String = "동아리 이름",
     clubIcon: Int = R.drawable.ic_launcher_background,
     universityAndMajor: String = "OO대학교 OOO학과",
-    onAccept: () -> Unit = {},
-    onDecline: () -> Unit = {},
+    kakaoTalkLink: String = "카카오톡 링크 복사 테스트값",
     isRandomMatching: Boolean = false,
 ) {
+    val clipboardManager = LocalClipboardManager.current
+
+
     val noticeColor =
-        if (isRandomMatching) defaultCampusBallColors.crimson else defaultCampusBallColors.mediumblue
+        if (isRandomMatching) colors.crimson else colors.mediumblue
     val noticeText =
         if (isRandomMatching) "랜덤 매칭 요청" else "친선 경기"
 
@@ -84,61 +89,31 @@ fun ClubLookUpCard(
                     ) {
                         Text(
                             text = clubName,
-                            color = defaultCampusBallColors.likeblack,
-                            style = defaultCampusBallTypography.SB_16
+                            color = colors.likeblack,
+                            style = typography.SB_16
                         )
                         Spacer(Modifier.height(11.dp))
                         Text(
                             text = universityAndMajor,
-                            color = defaultCampusBallColors.likeblack,
-                            style = defaultCampusBallTypography.M_14
+                            color = colors.likeblack,
+                            style = typography.M_14
                         )
                         Spacer(Modifier.height(11.dp))
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
+                        Box(
+                            modifier = Modifier
+                                .height(22.dp)
+                                .widthIn(min = 148.dp)
+                                .noRippleClickable {
+                                    clipboardManager.setText(AnnotatedString(kakaoTalkLink))
+                                }
+                                .clip(RoundedCornerShape(5.dp))
+                                .background(colors.yellow, RoundedCornerShape(5.dp))
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .height(22.dp)
-                                    .widthIn(min = 75.dp)
-                                    .noRippleClickable {
-                                        onAccept()
-                                    }
-                                    .clip(RoundedCornerShape(20.dp))
-                                    .background(
-                                        Color(0xFF258FFF),
-                                        RoundedCornerShape(20.dp)
-                                    )
-                            ) {
-                                Text(
-                                    "수락", style = defaultCampusBallTypography.M_8,
-                                    fontSize = 10.sp,
-                                    color = defaultCampusBallColors.white,
-                                    modifier = Modifier.align(Alignment.Center)
-                                )
-                            }
-                            Spacer(Modifier.width(9.dp))
-                            Box(
-                                modifier = Modifier
-                                    .height(21.dp)
-                                    .widthIn(min = 75.dp)
-                                    .noRippleClickable {
-                                        onDecline()
-                                    }
-                                    .clip(RoundedCornerShape(20.dp))
-                                    .background(
-                                        defaultCampusBallColors.salmon,
-                                        RoundedCornerShape(20.dp)
-                                    )
-                            ) {
-                                Text(
-                                    "거절", style = defaultCampusBallTypography.M_8,
-                                    fontSize = 10.sp,
-                                    color = defaultCampusBallColors.black,
-                                    modifier = Modifier.align(Alignment.Center)
-                                )
-                            }
+                            Text(
+                                "오픈채팅방 링크 복사", style = typography.M_8,
+                                color = Color(0xFF8F2626),
+                                modifier = Modifier.align(Alignment.Center)
+                            )
                         }
                     }
                 }
@@ -156,7 +131,7 @@ fun ClubLookUpCard(
             ) {
                 Text(
                     text = noticeText,
-                    style = defaultCampusBallTypography.SB_16,
+                    style = typography.SB_16,
                     color = Color.White,
                     fontSize = 11.sp,
                 )
@@ -167,12 +142,9 @@ fun ClubLookUpCard(
 
 @Preview()
 @Composable
-private fun ClubMatchCardPreview() {
-    ClubLookUpCard(
-        clubName = "동아리 이름1",
-        universityAndMajor = "건국대학교 컴퓨터공학부",
-        onAccept = {},
-        onDecline = {},
+private fun ScheduleClubCardPreview() {
+    ScheduleClubCard(
         isRandomMatching = false
     )
 }
+

@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 
 object SummerHackathonTheme {
-    val colors: CampusBallColors        @Composable
+    val colors: CampusBallColors
+        @Composable
         @ReadOnlyComposable
         get() = LocalCampusBallColorsProvider.current
 
