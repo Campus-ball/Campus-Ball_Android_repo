@@ -74,7 +74,7 @@ fun SignUpScreen(
 
         when (role) {
             ClubRole.Leader -> LeaderForm(navController = navController)
-            ClubRole.Member -> MemberForm()
+            ClubRole.Member -> MemberForm(navController = navController)
         }
     }
 }

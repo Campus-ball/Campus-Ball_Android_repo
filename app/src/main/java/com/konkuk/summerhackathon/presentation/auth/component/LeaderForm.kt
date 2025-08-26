@@ -277,6 +277,8 @@ fun LeaderForm(
                 onValueChange = { kakaoOpenChatLink = it },
                 placeholder = "카카오톡 오픈채팅 링크를 입력하세요"
             )
+
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }
