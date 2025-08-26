@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
 
                 val showBottomBar = when (currentRoute) {
                     Route.Login.route -> false
+                    Route.SignUp.route -> false
                     else -> true
                 }
 

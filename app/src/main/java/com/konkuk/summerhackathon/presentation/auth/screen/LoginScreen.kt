@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.summerhackathon.R
+import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.auth.component.IdField
 import com.konkuk.summerhackathon.presentation.auth.component.LoginButton
 import com.konkuk.summerhackathon.presentation.auth.component.PasswordField
@@ -98,7 +99,8 @@ fun LoginScreen(
         Text(
             text = "회원가입",
             style = typography.M_14,
-            color = colors.white
+            color = colors.white,
+            modifier = Modifier.noRippleClickable { onSignUpClick() }
         )
 
         Spacer(modifier = Modifier.height(80.dp))
