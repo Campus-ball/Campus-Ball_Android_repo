@@ -32,24 +32,20 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
+import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ScheduleCalendar() {
+fun ScheduleCalendar(modifier: Modifier = Modifier) {
     var currentYearMonth by remember { mutableStateOf(YearMonth.now()) }
     var selectedDateTime by remember { mutableStateOf(LocalDateTime.now()) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(size = 8.dp))
             .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 8.dp))
-            .shadow(
-                elevation = 19.dp,
-                spotColor = Color(0x17000000),
-                ambientColor = Color(0x17000000)
-            )
-            .padding(start = 24.dp, end = 24.dp, top = 20.dp, bottom = 12.dp)
+            .padding(start = 20.dp, end = 20.dp, top = 10.dp, bottom = 8.dp)
     ) {
         CalendarView(
             yearMonth = currentYearMonth,
@@ -79,9 +75,9 @@ fun CalendarView(
             onPrevMonth = { onMonthChanged(yearMonth.minusMonths(1)) },
             onNextMonth = { onMonthChanged(yearMonth.plusMonths(1)) }
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        WeekDaysHeader()
         Spacer(modifier = Modifier.height(12.dp))
+        WeekDaysHeader()
+        Spacer(modifier = Modifier.height(8.dp))
         CalendarGrid(
             yearMonth = yearMonth,
             selectedDateTime = selectedDateTime, // 변경된 상태 전달
@@ -178,8 +174,8 @@ fun CalendarGrid(
 
 @Composable
 fun DayCell(day: String, isSelected: Boolean, onClick: () -> Unit) {
-    val backgroundColor = if (isSelected) Color(0xFFF47121) else Color.Transparent
-    val textColor = if (isSelected) Color.White else MaterialTheme.colorScheme.onBackground
+    val backgroundColor = if (isSelected) Color(0xFFF04D23) else Color.Transparent
+    val textColor = if (isSelected) colors.white else Color(0xFF4A5660)
 
     Box(
         modifier = Modifier
@@ -192,7 +188,7 @@ fun DayCell(day: String, isSelected: Boolean, onClick: () -> Unit) {
     ) {
         Text(
             text = day,
-            style = if (!isSelected) typography.SB_16 else typography.B_24.copy(fontSize = 16.sp),
+            style = if (!isSelected) typography.SB_14 else typography.B_24.copy(fontSize = 14.sp),
             color = textColor,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
         )

@@ -1,5 +1,7 @@
 package com.konkuk.summerhackathon.presentation.schedule.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,16 +25,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
+import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalendar
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleClubCard
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 
-//
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScheduleScreen(
     modifier: Modifier = Modifier,
     clubName: String = "KONKUK FC"
 ) {
+    val screenScrollState = rememberScrollState()
     val scrollState = rememberScrollState()
 
     Box(
@@ -49,7 +54,7 @@ fun ScheduleScreen(
             ),
     ) {
         Column(
-            Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CampusBallTopBar()
@@ -83,11 +88,14 @@ fun ScheduleScreen(
 
 
             // TODO: 달력 구현 후 바꿔야 함
-            Spacer(
-                Modifier
-                    .size(306.dp, 294.dp)
-                    .background(defaultCampusBallColors.skyblue)
-            )
+            /*
+              Spacer(
+                            Modifier
+                                .size(306.dp, 294.dp)
+                                .background(defaultCampusBallColors.skyblue)
+                        )
+             */
+            ScheduleCalendar(modifier = Modifier.padding(horizontal = 34.dp).height(294.dp))
 
             Spacer(Modifier.height(20.dp))
 
@@ -121,6 +129,7 @@ fun ScheduleScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun ScheduleScreenPreview() {
