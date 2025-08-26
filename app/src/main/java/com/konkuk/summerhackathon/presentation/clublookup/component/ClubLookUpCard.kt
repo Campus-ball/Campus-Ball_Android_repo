@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.summerhackathon.R
+import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 
@@ -101,7 +102,7 @@ fun ClubLookUpCard(
                                 modifier = Modifier
                                     .height(22.dp)
                                     .widthIn(min = 75.dp)
-                                    .clickable {
+                                    .noRippleClickable {
                                         onAccept()
                                     }
                                     .clip(RoundedCornerShape(20.dp))
@@ -122,7 +123,7 @@ fun ClubLookUpCard(
                                 modifier = Modifier
                                     .height(21.dp)
                                     .widthIn(min = 75.dp)
-                                    .clickable {
+                                    .noRippleClickable {
                                         onDecline()
                                     }
                                     .clip(RoundedCornerShape(20.dp))
