@@ -39,7 +39,7 @@ data class CampusBallColors(
     val yellow: Color
 )
 
-val defaultMoruColors = CampusBallColors(
+val defaultCampusBallColors = CampusBallColors(
     white = White,
     lightgray = LightGray,
     gray = Gray,
@@ -57,4 +57,4 @@ val defaultMoruColors = CampusBallColors(
     yellow = Yellow
 )
 
-val LocalCampusBallColorsProvider = staticCompositionLocalOf { defaultMoruColors }
+val LocalCampusBallColorsProvider = staticCompositionLocalOf { defaultCampusBallColors }

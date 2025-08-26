@@ -24,12 +24,19 @@ class AuthViewModel : ViewModel() {
         if (idError != null || pwError != null) return
 
         isLoading = true
-        val ok = (id == AuthConfig.DUMMY_ID && pw == AuthConfig.DUMMY_PW)
-        isLoading = false
-        if (ok) onSuccess()
-        else {
-            loginError = "입력하신 아이디 또는 비밀번호가 일치하지 않습니다."
-            onFailure(loginError!!)
+        try {
+            val ok = (id == AuthConfig.DUMMY_ID && pw == AuthConfig.DUMMY_PW)
+            if (ok) {
+                loginError = null
+                onSuccess()
+            } else {
+                loginError = "잘못된 형식의 아이디 또는 비밀번호 입니다"
+                id = ""
+                pw = ""
+                onFailure(loginError!!)
+            }
+        } finally {
+            isLoading = false
         }
     }
 }

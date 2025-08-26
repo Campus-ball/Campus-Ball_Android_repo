@@ -30,7 +30,8 @@ fun MainNavGraph(
                         restoreState = true
                     }
                 },
-                onSignUpClick = {}
+                onSignUpClick = {},
+                modifier = modifier
             )
         }
 
