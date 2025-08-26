@@ -82,7 +82,7 @@ fun ScheduleScreen(
             Spacer(Modifier.height(24.dp))
 
 
-            // TODO: 달력 구현 후 바꿔야 함 
+            // TODO: 달력 구현 후 바꿔야 함
             Spacer(
                 Modifier
                     .size(306.dp, 294.dp)
