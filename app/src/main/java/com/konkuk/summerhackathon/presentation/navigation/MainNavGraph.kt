@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.konkuk.summerhackathon.presentation.clublookup.screen.ClublookUpScreen
+import com.konkuk.summerhackathon.presentation.clublookup.screen.ClubLookUpScreen
 import com.konkuk.summerhackathon.presentation.match.screen.MatchScreen
 import com.konkuk.summerhackathon.presentation.proposal.screen.ProposalScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleScreen
@@ -25,7 +25,7 @@ fun MainNavGraph(
         }
 
         composable(route = Route.ClubLookUp.route){
-            ClublookUpScreen(modifier = modifier)
+            ClubLookUpScreen(modifier = modifier)
         }
 
         composable(route = Route.Match.route){
