@@ -10,8 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
-// ===== 모델 =====
-enum class Gender { MALE, FEMALE, OTHER }
 
 data class LeaderSignUpData(
     val name: String,
@@ -72,25 +70,26 @@ fun LeaderForm(
     var pwConfirm by rememberSaveable { mutableStateOf("") }
     var isPwValid by rememberSaveable { mutableStateOf(false) }
 
-    var contact by rememberSaveable { mutableStateOf("") }
-    var clubName by rememberSaveable { mutableStateOf("") }
-    var clubIntro by rememberSaveable { mutableStateOf("") }
     var university by rememberSaveable { mutableStateOf(universities.first()) }
     var department by rememberSaveable { mutableStateOf(departmentsMap[universities.first()]!!.first()) }
-    var clubLogoUriStr by rememberSaveable { mutableStateOf<String?>(null) }
-    var kakaoOpenChatLink by rememberSaveable { mutableStateOf("") }
 
-    // 대학 변경 시 학과 초기화
+    var contact by rememberSaveable { mutableStateOf<String?>(null) }
+    var clubName by rememberSaveable { mutableStateOf<String?>(null) }
+    var clubIntro by rememberSaveable { mutableStateOf("") }
+
+    var clubLogoUriStr by rememberSaveable { mutableStateOf<String?>(null) }
+    var kakaoOpenChatLink by rememberSaveable { mutableStateOf<String?>(null) }
+
+    val deptOptions = departmentsMap[university].orEmpty()
     LaunchedEffect(university) {
-        departmentsMap[university]?.firstOrNull()?.let { first ->
-            if (department !in (departmentsMap[university] ?: emptyList())) {
-                department = first
-            }
+        if (department !in deptOptions) {
+            department = deptOptions.firstOrNull() ?: department
         }
     }
 
     // 현재 구현된 필드 기준 활성화 조건 (추가 필드 붙이면 조건 확장)
-    val isFormValid = isNameValid && nicknameConfirmed != null && userIdConfirmed != null && isPwValid
+    val isFormValid =
+        isNameValid && nicknameConfirmed != null && userIdConfirmed != null && isPwValid && clubName != null
 
     Column(
         modifier = modifier
@@ -131,6 +130,57 @@ fun LeaderForm(
             onValidityChange = { isPwValid = it }
         )
 
+        SearchDropdownChipField(
+            label = "소속 대학",
+            selected = university,
+            options = universities,
+            onSelected = { university = it }
+        )
+
+        SearchDropdownChipField(
+            label = "소속 학과",
+            placeholder = "학과 검색…",
+            selected = department,
+            options = deptOptions,
+            onSelected = { department = it }
+        )
+
+        GenderSegmentedField(
+            selected = gender,
+            onSelect = { gender = it }
+        )
+
+        IntroTextArea(
+            value = clubIntro,
+            onValueChange = { clubIntro = it }
+        )
+
+        LogoPickerField(
+            value = clubLogoUriStr,
+            onValueChange = { clubLogoUriStr = it }
+        )
+
+        RequiredTextField(
+            label = "동아리명",
+            value = clubName,
+            onValueChange = { clubName = it },
+            placeholder = "동아리명을 입력하세요"
+        )
+
+        RequiredTextField(
+            label = "연락처",
+            value = contact,
+            onValueChange = { contact = it },
+            placeholder = "연락처를 입력하세요"
+        )
+
+        RequiredTextField(
+            label = "카카오톡 오픈채팅",
+            value = kakaoOpenChatLink,
+            onValueChange = { kakaoOpenChatLink = it },
+            placeholder = "카카오톡 오픈채팅 링크를 입력하세요"
+        )
+
         Button(
             onClick = {
                 val data = LeaderSignUpData(
@@ -139,13 +189,13 @@ fun LeaderForm(
                     gender = gender,
                     userId = userId,
                     password = password,
-                    contact = contact,
-                    clubName = clubName,
+                    contact = contact!!,
+                    clubName = clubName!!,
                     clubIntro = clubIntro,
                     university = university,
                     department = department,
                     clubLogoUri = clubLogoUriStr,
-                    kakaoOpenChatLink = kakaoOpenChatLink
+                    kakaoOpenChatLink = kakaoOpenChatLink!!
                 )
                 onSubmit(data)
             },

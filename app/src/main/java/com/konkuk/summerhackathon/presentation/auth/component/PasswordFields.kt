@@ -16,7 +16,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +45,7 @@ fun PasswordFields(
     val isMismatch = confirmPassword.isNotEmpty() && (password != confirmPassword)
     val isValid = password.isNotEmpty() && confirmPassword.isNotEmpty() && !isMismatch
 
-    LaunchedEffect(password, confirmPassword) { onValidityChange(isValid) }
+    SideEffect { onValidityChange(isValid) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Column {
