@@ -1,4 +1,4 @@
-package com.konkuk.summerhackathon.presentation.clublookup.component
+package com.konkuk.summerhackathon.core.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
