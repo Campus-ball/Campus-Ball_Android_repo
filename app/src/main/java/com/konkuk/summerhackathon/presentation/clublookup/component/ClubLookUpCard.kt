@@ -147,6 +147,7 @@ fun ClubLookUpCard(
                     .padding(top = 5.dp)
                     .clip(RoundedCornerShape(12.dp, 0.dp, 12.dp, 12.dp))
                     .background(noticeColor)
+                    .widthIn(80.dp)
                     .padding(horizontal = 9.dp, vertical = 6.dp),
                 contentAlignment = Alignment.Center
             ) {
