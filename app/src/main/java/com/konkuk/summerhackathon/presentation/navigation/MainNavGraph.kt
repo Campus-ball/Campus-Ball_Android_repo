@@ -39,7 +39,10 @@ fun MainNavGraph(
         }
 
         composable(route = Route.SignUp.route) {
-            SignUpScreen(modifier = modifier)
+            SignUpScreen(
+                modifier = modifier,
+                navController = navController
+            )
         }
 
         composable(route = Route.Schedule.route){

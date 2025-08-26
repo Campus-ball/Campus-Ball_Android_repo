@@ -1,55 +1,85 @@
 package com.konkuk.summerhackathon.presentation.auth.component
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.*
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.auth.screen.ClubRole
+import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
+import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
 @Composable
 fun ClubRoleTabs(
     selected: ClubRole,
     onSelect: (ClubRole) -> Unit,
     modifier: Modifier = Modifier,
-    activeColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onBackground,
-    inactiveColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-    indicatorThickness: Int = 2,
+    activeColor: Color = colors.black,
+    inactiveColor: Color = colors.lightgray,
+    underlineThickness: Int = 4,
+    labelTextStyle: TextStyle = typography.B_20,
 ) {
-    val tabs = listOf(ClubRole.Leader, ClubRole.Member)
+    var leaderTextPx by remember { mutableIntStateOf(0) }
+    var memberTextPx by remember { mutableIntStateOf(0) }
+    val density = LocalDensity.current
+    val leaderUnderline = with(density) { leaderTextPx.toDp() + 64.dp }
+    val memberUnderline = with(density) { memberTextPx.toDp() + 64.dp }
 
-    TabRow(
-        selectedTabIndex = tabs.indexOf(selected),
-        modifier = modifier.fillMaxWidth(),
-        indicator = { tabPositions ->
-            TabRowDefaults.SecondaryIndicator(
-                Modifier.tabIndicatorOffset(tabPositions[tabs.indexOf(selected)]),
-                height = indicatorThickness.dp,
-                color = activeColor
-            )
-        },
-        containerColor = MaterialTheme.colorScheme.background,
-        contentColor = activeColor,
-        divider = {}
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+            .fillMaxWidth()
     ) {
-        tabs.forEach { role ->
-            val isSelected = role == selected
-            Tab(
-                selected = isSelected,
-                onClick = { if (!isSelected) onSelect(role) },
-                selectedContentColor = activeColor,
-                unselectedContentColor = inactiveColor,
-                text = {
-                    Text(
-                        text = when (role) {
-                            ClubRole.Leader -> "동아리장"
-                            ClubRole.Member -> "동아리원"
-                        },
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                    )
-                }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .wrapContentWidth()
+                .noRippleClickable { if (selected != ClubRole.Leader) onSelect(ClubRole.Leader) }
+        ) {
+            Text(
+                text = "동아리장",
+                style = labelTextStyle,
+                color = if (selected == ClubRole.Leader) activeColor else inactiveColor,
+                fontWeight = if (selected == ClubRole.Leader) FontWeight.Bold else FontWeight.SemiBold,
+                onTextLayout = { leaderTextPx = it.size.width }
+            )
+            Spacer(Modifier.height(4.dp))
+            Box(
+                Modifier
+                    .height(underlineThickness.dp)
+                    .width(leaderUnderline)
+                    .background(if (selected == ClubRole.Leader) activeColor else Color.Transparent)
+            )
+        }
+
+        Spacer(Modifier.width(40.dp))
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .wrapContentWidth()
+                .noRippleClickable { if (selected != ClubRole.Member) onSelect(ClubRole.Member) }
+        ) {
+            Text(
+                text = "동아리원",
+                style = labelTextStyle,
+                color = if (selected == ClubRole.Member) activeColor else inactiveColor,
+                fontWeight = if (selected == ClubRole.Member) FontWeight.Bold else FontWeight.SemiBold,
+                onTextLayout = { memberTextPx = it.size.width }
+            )
+            Spacer(Modifier.height(4.dp))
+            Box(
+                Modifier
+                    .height(underlineThickness.dp)
+                    .width(memberUnderline)
+                    .background(if (selected == ClubRole.Member) activeColor else Color.Transparent)
             )
         }
     }
