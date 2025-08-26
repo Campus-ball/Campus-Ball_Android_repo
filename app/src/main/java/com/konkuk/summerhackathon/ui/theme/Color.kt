@@ -19,6 +19,8 @@ val DarkRed = Color(color = 0xFF8F2626)
 val Salmon = Color(color = 0xFFEE5E60)
 val Green = Color(color = 0xFF2ECC71)
 val Yellow = Color(color = 0xFFFFD84D)
+val LikeWhite = Color(color = 0xFFFDFDFD)
+val LikeBlack = Color(color = 0xFF373737)
 
 @Immutable
 data class CampusBallColors(
@@ -36,7 +38,9 @@ data class CampusBallColors(
     val darkred: Color,
     val salmon: Color,
     val green: Color,
-    val yellow: Color
+    val yellow: Color,
+    val likewhite: Color,
+    val likeblack: Color
 )
 
 val defaultCampusBallColors = CampusBallColors(
@@ -54,7 +58,9 @@ val defaultCampusBallColors = CampusBallColors(
     darkred = DarkRed,
     salmon = Salmon,
     green = Green,
-    yellow = Yellow
+    yellow = Yellow,
+    likewhite = LikeWhite,
+    likeblack = LikeBlack
 )
 
 val LocalCampusBallColorsProvider = staticCompositionLocalOf { defaultCampusBallColors }
