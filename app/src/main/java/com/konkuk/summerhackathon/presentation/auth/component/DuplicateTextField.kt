@@ -43,7 +43,7 @@ fun DuplicateTextField(
     onConfirmed: (String?) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String = "닉네임을 입력하세요",
-    minLength: Int = 2,
+    minLength: Int = 1,
     maxLength: Int = 10,
     dummyTakenNicknames: Set<String> = setOf("배고픈 하마"),
     shape: RoundedCornerShape = RoundedCornerShape(12.dp),
@@ -61,8 +61,18 @@ fun DuplicateTextField(
         dummyTakenNicknames.any { it.trim().equals(normalized, ignoreCase = true) }
     }
 
-    val showDupError = checked && !available && canCheck
-    val errorText = if (showDupError) error else null
+    val showError = checked && !available && canCheck
+    val showSuccess = checked && available && canCheck
+    val helperText = when {
+        showError -> error
+        showSuccess -> "사용 가능합니다"
+        else -> null
+    }
+    val helperColor = when {
+        showError -> colors.red
+        showSuccess -> colors.indigo
+        else -> null
+    }
 
     fun resetCheck() {
         if (checked || available) {
@@ -79,8 +89,8 @@ fun DuplicateTextField(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = title, style = typography.EB_12, color = colors.black)
-            if (errorText != null) {
-                Text(errorText, style = typography.L_10, color = colors.red)
+            if (helperText != null && helperColor != null) {
+                Text(helperText, style = typography.L_10, color = helperColor)
             }
         }
 
@@ -88,7 +98,7 @@ fun DuplicateTextField(
 
         val border = BorderStroke(
             1.5.dp,
-            if (showDupError) colors.red else colors.indigo
+            if (showError) colors.red else colors.indigo
         )
 
         Box(
@@ -108,7 +118,7 @@ fun DuplicateTextField(
                 },
                 textStyle = typography.M_14.copy(color = colors.black),
                 singleLine = true,
-                cursorBrush = SolidColor(if (showDupError) colors.red else colors.indigo),
+                cursorBrush = SolidColor(if (showError) colors.red else colors.indigo),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Text

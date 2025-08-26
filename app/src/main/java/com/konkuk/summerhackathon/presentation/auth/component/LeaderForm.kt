@@ -1,14 +1,18 @@
 package com.konkuk.summerhackathon.presentation.auth.component
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
 
 data class LeaderSignUpData(
@@ -43,7 +47,6 @@ fun LeaderForm(
     modifier: Modifier = Modifier,
     onSubmit: (LeaderSignUpData) -> Unit = {}
 ) {
-    // --- 더미 데이터 ---
     val universities = listOf("건국대학교", "서울대학교", "연세대학교", "고려대학교", "성균관대학교")
     val departmentsMap = mapOf(
         "건국대학교" to listOf("컴퓨터공학부", "전자공학부", "경영학과", "수학과"),
@@ -53,11 +56,9 @@ fun LeaderForm(
         "성균관대학교" to listOf("소프트웨어학과", "전자전기공학과", "경영학과"),
     )
 
-    // --- 상태 ---
     var name by rememberSaveable { mutableStateOf("") }
     val isNameValid = remember(name) { SignUpValidators.isValidName(name) }
 
-    // 닉네임: 입력값 / 확인 통과값 분리
     var nicknameInput by rememberSaveable { mutableStateOf("") }
     var nicknameConfirmed by rememberSaveable { mutableStateOf<String?>(null) }
 
@@ -87,9 +88,18 @@ fun LeaderForm(
         }
     }
 
-    // 현재 구현된 필드 기준 활성화 조건 (추가 필드 붙이면 조건 확장)
     val isFormValid =
-        isNameValid && nicknameConfirmed != null && userIdConfirmed != null && isPwValid && clubName != null
+        isNameValid && nicknameConfirmed != null && userIdConfirmed != null && isPwValid && clubName != null && contact != null && kakaoOpenChatLink != null
+
+    val blockers = listOfNotNull(
+        if (!isNameValid) "이름" else null,
+        if (nicknameConfirmed == null) "닉네임 중복확인" else null,
+        if (userIdConfirmed == null) "아이디 중복확인" else null,
+        if (!isPwValid) "비밀번호 일치" else null,
+        if (clubName == null) "동아리명" else null,
+        if (contact == null) "연락처" else null,
+        if (kakaoOpenChatLink == null) "오픈채팅 링크" else null
+    )
 
     Column(
         modifier = modifier
@@ -97,6 +107,30 @@ fun LeaderForm(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        FormActionButton(
+            text = "확인",
+            enabled = isFormValid,
+            onClick = {
+                val data = LeaderSignUpData(
+                    name = name,
+                    nickname = nicknameConfirmed!!,
+                    gender = gender,
+                    userId = userId,
+                    password = password,
+                    contact = contact!!,
+                    clubName = clubName!!,
+                    clubIntro = clubIntro,
+                    university = university,
+                    department = department,
+                    clubLogoUri = clubLogoUriStr,
+                    kakaoOpenChatLink = kakaoOpenChatLink!!
+                )
+                onSubmit(data)
+            },
+            modifier = Modifier,
+            missingReasons = blockers
+        )
+
         NameTextField(
             value = name,
             onValueChange = { name = it }
@@ -180,32 +214,5 @@ fun LeaderForm(
             onValueChange = { kakaoOpenChatLink = it },
             placeholder = "카카오톡 오픈채팅 링크를 입력하세요"
         )
-
-        Button(
-            onClick = {
-                val data = LeaderSignUpData(
-                    name = name,
-                    nickname = nicknameConfirmed!!,
-                    gender = gender,
-                    userId = userId,
-                    password = password,
-                    contact = contact!!,
-                    clubName = clubName!!,
-                    clubIntro = clubIntro,
-                    university = university,
-                    department = department,
-                    clubLogoUri = clubLogoUriStr,
-                    kakaoOpenChatLink = kakaoOpenChatLink!!
-                )
-                onSubmit(data)
-            },
-            enabled = isFormValid,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text("임시 저장", style = typography.B_17)
-        }
     }
 }
