@@ -3,6 +3,8 @@ package com.konkuk.summerhackathon.presentation.navigation
 sealed class Route(
     val route: String
 ) {
+    data object Login : Route("login")
+
     data object Schedule: Route(route = "schedule")
 
     data object ClubLookUp: Route(route = "club_lookup")

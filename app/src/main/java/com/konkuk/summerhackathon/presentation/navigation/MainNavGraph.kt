@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.konkuk.summerhackathon.presentation.auth.screen.LoginScreen
 import com.konkuk.summerhackathon.presentation.clublookup.screen.ClublookUpScreen
 import com.konkuk.summerhackathon.presentation.match.screen.MatchScreen
 import com.konkuk.summerhackathon.presentation.proposal.screen.ProposalScreen
@@ -18,8 +19,21 @@ fun MainNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Route.Match.route,
+        startDestination = Route.Login.route,
     ){
+        composable(route = Route.Login.route) {
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(Route.Match.route) {
+                        popUpTo(Route.Login.route) { inclusive = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onSignUpClick = {}
+            )
+        }
+
         composable(route = Route.Schedule.route){
             ScheduleScreen(modifier = modifier)
         }
