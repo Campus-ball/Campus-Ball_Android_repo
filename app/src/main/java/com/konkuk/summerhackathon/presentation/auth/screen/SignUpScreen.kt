@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,7 +43,6 @@ fun SignUpScreen(
             .fillMaxSize()
             .background(colors.white)
             .padding(horizontal = 21.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(21.dp))
         Box(
@@ -76,8 +73,8 @@ fun SignUpScreen(
         )
 
         when (role) {
-            ClubRole.Leader -> LeaderForm()
-            ClubRole.Member -> MemberForm()
+            ClubRole.Leader -> LeaderForm(navController = navController)
+            ClubRole.Member -> MemberForm(navController = navController)
         }
     }
 }
