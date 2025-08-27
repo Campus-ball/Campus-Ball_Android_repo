@@ -1,8 +1,7 @@
-package com.konkuk.summerhackathon.presentation.clublookup.component
+package com.konkuk.summerhackathon.presentation.proposal.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +32,7 @@ import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 
 @Composable
-fun ClubLookUpCard(
+fun ProposalCard(
     modifier: Modifier = Modifier,
     clubName: String = "동아리 이름",
     clubIcon: Int = R.drawable.ic_launcher_background,
@@ -163,16 +162,4 @@ fun ClubLookUpCard(
             }
         }
     }
-}
-
-@Preview()
-@Composable
-private fun ClubMatchCardPreview() {
-    ClubLookUpCard(
-        clubName = "동아리 이름1",
-        universityAndMajor = "건국대학교 컴퓨터공학부",
-        onAccept = {},
-        onDecline = {},
-        isRandomMatching = false
-    )
 }

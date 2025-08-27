@@ -17,6 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -24,11 +28,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
+import com.konkuk.summerhackathon.presentation.schedule.component.DateInputField
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalendar
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleClubCard
+import com.konkuk.summerhackathon.presentation.schedule.component.TimeInputField
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
+import java.util.Calendar
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -58,6 +66,38 @@ fun ScheduleScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CampusBallTopBar()
+
+            var date by remember { mutableStateOf("") }
+            val cal = Calendar.getInstance()
+            var start by remember { mutableStateOf("") }
+            var end by remember { mutableStateOf("") }
+
+            DateInputField(
+                value = date,
+                onValueChange = { date = it },
+                iconResId = R.drawable.img_calendar,
+                label = "날짜",
+                placeholder = "YYYY.MM.DD",
+                minDateMillis = cal.timeInMillis
+            )
+
+            Spacer(Modifier.height(12.dp))
+            TimeInputField(
+                value = start,
+                onValueChange = { start = it },
+                label = "시작시간",
+                iconResId = R.drawable.img_clock,
+                is24HourText = false
+            )
+
+            Spacer(Modifier.height(12.dp))
+            TimeInputField(
+                value = end,
+                onValueChange = { end = it },
+                label = "종료시간",
+                iconResId = R.drawable.img_clock,
+                is24HourText = false
+            )
 
             Spacer(Modifier.height(20.dp))
 
