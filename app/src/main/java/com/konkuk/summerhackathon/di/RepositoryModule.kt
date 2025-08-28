@@ -4,6 +4,10 @@ import com.konkuk.summerhackathon.data.repositoryimpl.AuthRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.AvailabilityRepositoryImpl
 import com.konkuk.summerhackathon.domain.repository.AuthRepository
 import com.konkuk.summerhackathon.data.repositoryimpl.CalendarRepositoryImpl
+import com.konkuk.summerhackathon.data.repositoryimpl.UserRepositoryImpl
+import com.konkuk.summerhackathon.domain.repository.CalendarRepository
+import com.konkuk.summerhackathon.domain.repository.UserRepository
+import dagger.Binds
 import com.konkuk.summerhackathon.data.repositoryimpl.MatchRepositoryImpl
 import com.konkuk.summerhackathon.domain.repository.AvailabilityRepository
 import com.konkuk.summerhackathon.domain.repository.CalendarRepository
@@ -38,4 +42,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideAuthRepository(impl: AuthRepositoryImpl): AuthRepository = impl
+
+    @Provides @Singleton
+    fun provideUserRepository(impl: UserRepositoryImpl): UserRepository = impl
 }
