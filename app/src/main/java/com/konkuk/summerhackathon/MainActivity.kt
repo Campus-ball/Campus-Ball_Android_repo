@@ -69,6 +69,7 @@ class MainActivity : ComponentActivity() {
                     Route.MatchDetail.route -> false
                     Route.ProposalDetail.route -> false
                     "${Route.ProposalDetail.route}/{clubId}" -> false
+                    "${Route.ComponentLookUp.route}/{clubId}"->false
                     else -> true
                 }
 
@@ -79,6 +80,7 @@ class MainActivity : ComponentActivity() {
                     Route.ComponentLookUp.route,
                     Route.ProposalDetail.route,
                     "${Route.ProposalDetail.route}/{clubId}",
+                    "${Route.ComponentLookUp.route}/{clubId}"
                 )
 
 
