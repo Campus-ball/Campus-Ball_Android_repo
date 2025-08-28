@@ -1,6 +1,7 @@
 package com.konkuk.summerhackathon.core.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,7 +33,9 @@ fun RequiredTextField(
 ) {
     val isError = value == null
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -50,6 +53,7 @@ fun RequiredTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = minHeight)
+                .background(colors.white, shape)
                 .border(border, shape)
                 .clip(shape)
                 .padding(horizontal = 16.dp, vertical = 12.dp)

@@ -18,6 +18,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -41,7 +43,15 @@ fun SignUpScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(colors.white)
+            .background(
+                brush = Brush.verticalGradient(
+                    colorStops = arrayOf(
+                        0.0f to Color(0xFFFFFFFF),
+                        0.61f to Color(0xFFCBCBCB),
+                        1.0f to Color(0xFFF0F1F7)
+                    )
+                )
+            )
             .padding(horizontal = 21.dp)
     ) {
         Spacer(modifier = Modifier.height(21.dp))

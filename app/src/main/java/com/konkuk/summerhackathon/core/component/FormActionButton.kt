@@ -51,7 +51,7 @@ fun FormActionButton(
             .height(height)
             .clip(shape)
             .border(BorderStroke(2.dp, borderColor), shape)
-            .background(Color.Transparent)
+            .background(colors.white)
             .noRippleClickable {
                 if (enabled) onClick() else showDialog = true
             },
