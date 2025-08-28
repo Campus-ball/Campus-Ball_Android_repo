@@ -86,23 +86,34 @@ fun MainNavGraph(
 
         // Lookup
         composable(route = Route.CollegeLookUp.route) {
-            CollegeLookUpScreen(modifier = modifier, navController = navController, onDepartmentClick = { dept ->
-                navController.navigate(Route.ClubLookUp.path(dept.departmentId))
-            })
+            CollegeLookUpScreen(
+                modifier = modifier,
+                navController = navController,
+                onDepartmentClick = { dept ->
+                    navController.navigate(
+                        Route.ClubLookUp.path(
+                            dept.departmentId,
+                            department = dept.departmentName
+                        )
+                    )
+                })
         }
 
 
         composable(
             route = Route.ClubLookUp.route,
             arguments = listOf(
-                navArgument("departmentId") { type = NavType.IntType }
+                navArgument("departmentId") { type = NavType.IntType },
+                navArgument("department") { type = NavType.StringType }
             )
         ) { backStackEntry ->
             val departmentId = backStackEntry.arguments?.getInt("departmentId") ?: 0
+            val department = backStackEntry.arguments?.getString("department") ?: ""
             ClubLookUpScreen(
                 modifier = modifier,
                 navController = navController,
-                collegeId = departmentId   // 필요하면 넘겨서 사용
+                collegeId = departmentId,   // 필요하면 넘겨서 사용
+                department = department
             )
         }
 
@@ -115,7 +126,11 @@ fun MainNavGraph(
             arguments = listOf(navArgument("clubId") { type = NavType.IntType })
         ) { backStackEntry ->
             val clubId = backStackEntry.arguments?.getInt("clubId") ?: -1
-            ComponentLookUpScreen(modifier = modifier, navController = navController, clubId = clubId)
+            ComponentLookUpScreen(
+                modifier = modifier,
+                navController = navController,
+                clubId = clubId
+            )
             Log.d("ComponentLookUp requestId", clubId.toString())
         }
 
