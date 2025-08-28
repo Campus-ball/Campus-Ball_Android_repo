@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.summerhackathon.presentation.auth.screen.AuthConfig
 import com.konkuk.summerhackathon.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,15 +16,25 @@ class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    var id by mutableStateOf("");        private set
-    var pw by mutableStateOf("");        private set
-    var idError by mutableStateOf<String?>(null);  private set
-    var pwError by mutableStateOf<String?>(null);  private set
+    var id by mutableStateOf(""); private set
+    var pw by mutableStateOf(""); private set
+    var idError by mutableStateOf<String?>(null); private set
+    var pwError by mutableStateOf<String?>(null); private set
     var loginError by mutableStateOf<String?>(null); private set
     var isLoading by mutableStateOf(false); private set
 
-    fun onIdChange(v: String) { id = v; idError = null; loginError = null }
-    fun onPwChange(v: String) { pw = v; pwError = null; loginError = null }
+
+    private val _logoutDone = MutableStateFlow(false)
+    val logoutDone = _logoutDone.asStateFlow()
+
+
+    fun onIdChange(v: String) {
+        id = v; idError = null; loginError = null
+    }
+
+    fun onPwChange(v: String) {
+        pw = v; pwError = null; loginError = null
+    }
 
     fun login(
         onSuccess: () -> Unit = {},
@@ -71,6 +83,9 @@ class AuthViewModel @Inject constructor(
     }
 
     fun logout() {
-        viewModelScope.launch { authRepository.logout() }
+        viewModelScope.launch {
+            authRepository.logout()
+            _logoutDone.value = true
+        }
     }
 }

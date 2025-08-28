@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.core.component.DisabledField
@@ -39,6 +40,7 @@ import com.konkuk.summerhackathon.core.component.NameTextField
 import com.konkuk.summerhackathon.core.component.RequiredTextField
 import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.auth.component.SignUpValidators
+import com.konkuk.summerhackathon.presentation.auth.viewmodel.AuthViewModel
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.presentation.settings.component.ConfirmModalBox
 import com.konkuk.summerhackathon.presentation.settings.component.OutlinePillButton
@@ -52,7 +54,8 @@ fun SettingsScreen(
     //ui: MyAccountUi,
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    vm: SettingsViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+    vm: SettingsViewModel = hiltViewModel(),
+    viewModel: AuthViewModel = hiltViewModel()
 ) {
     val ui by vm.ui.collectAsState()
 
@@ -65,6 +68,20 @@ fun SettingsScreen(
     LaunchedEffect(ui) {
         saved = ui
         if (!isEditMode) draft = ui
+    }
+
+    val logoutDone by viewModel.logoutDone.collectAsState()
+
+    LaunchedEffect(logoutDone) {
+        if (logoutDone) {
+            navController.navigate(Route.Login.route) {
+                popUpTo(Route.Login.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
     }
 
     var showDone by remember { mutableStateOf(false) }
@@ -173,13 +190,15 @@ fun SettingsScreen(
         rightText = "확인",
         onLeft = { showLogout = false },
         onRight = {
-            navController.navigate(Route.Login.route) {
-                popUpTo(com.konkuk.summerhackathon.presentation.navigation.Route.Login.route) {
+            viewModel.logout()
+
+/*            navController.navigate(Route.Login.route) {
+                popUpTo(Route.Login.route) {
                     inclusive = true
                 }
                 launchSingleTop = true
                 restoreState = true
-            }
+            }*/
         },
         onDismiss = { showLogout = false }
     )
@@ -190,13 +209,7 @@ fun SettingsScreen(
         rightText = "확인",
         onLeft = { showOut = false },
         onRight = {
-            navController.navigate(Route.Login.route) {
-                popUpTo(com.konkuk.summerhackathon.presentation.navigation.Route.Login.route) {
-                    inclusive = true
-                }
-                launchSingleTop = true
-                restoreState = true
-            }
+
         },
         onDismiss = { showOut = false }
     )

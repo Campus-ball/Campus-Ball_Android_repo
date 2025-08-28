@@ -7,6 +7,7 @@ import com.konkuk.summerhackathon.data.dto.response.ClubLeaderSignUpResponse
 import com.konkuk.summerhackathon.data.dto.response.LoginResponse
 import com.konkuk.summerhackathon.data.dto.response.RefreshResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 
 interface AuthApi {
@@ -20,4 +21,7 @@ interface AuthApi {
     suspend fun signUpClubLeader(
         @Body body: ClubLeaderSignUpRequest
     ): ClubLeaderSignUpResponse
+
+    @POST( "auth/logout")
+    suspend fun logout()
 }
