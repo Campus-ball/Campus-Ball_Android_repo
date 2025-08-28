@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +30,7 @@ import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.auth.component.ClubRoleTabs
 import com.konkuk.summerhackathon.presentation.auth.component.LeaderForm
 import com.konkuk.summerhackathon.presentation.auth.component.MemberForm
+import com.konkuk.summerhackathon.presentation.auth.viewmodel.SignUpViewModel
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
@@ -37,9 +39,27 @@ enum class ClubRole { Leader, Member }
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    vm: SignUpViewModel = androidx.hilt.navigation.compose.hiltViewModel()
 ) {
     var role by rememberSaveable { mutableStateOf(ClubRole.Leader) }
+
+    LaunchedEffect(Unit) {
+        vm.events.collect { ev ->
+            when (ev) {
+                is SignUpViewModel.Event.SignUpLeaderSuccess -> {
+                    navController.navigate(com.konkuk.summerhackathon.presentation.navigation.Route.Login.route) {
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+
+                is SignUpViewModel.Event.Error -> {
+                    // TODO: 스낵바/토스트
+                }
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -86,8 +106,13 @@ fun SignUpScreen(
         )
 
         when (role) {
-            ClubRole.Leader -> LeaderForm(navController = navController)
-            ClubRole.Member -> MemberForm(navController = navController)
+            ClubRole.Leader ->
+                LeaderForm(
+                    navController = navController,
+                    onSubmit = { data -> vm.signUpLeader(data) }
+                )
+            ClubRole.Member ->
+                MemberForm(navController = navController)
         }
     }
 }

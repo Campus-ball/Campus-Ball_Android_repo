@@ -1,6 +1,8 @@
 package com.konkuk.summerhackathon.data.repositoryimpl
 
+import com.konkuk.summerhackathon.data.dto.request.ClubLeaderSignUpRequest
 import com.konkuk.summerhackathon.data.dto.request.LoginRequest
+import com.konkuk.summerhackathon.data.dto.response.ClubLeaderSignUpResponse
 import com.konkuk.summerhackathon.data.service.AuthApi
 import com.konkuk.summerhackathon.data.service.TokenManager
 import com.konkuk.summerhackathon.domain.repository.AuthRepository
@@ -21,4 +23,9 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun logout() {
         tokenManager.clear()
     }
+
+    override suspend fun signUpClubLeader(
+        req: ClubLeaderSignUpRequest
+    ): Result<ClubLeaderSignUpResponse> =
+        runCatching { api.signUpClubLeader(req) }
 }
