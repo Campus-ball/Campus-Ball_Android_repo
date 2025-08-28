@@ -107,7 +107,7 @@ fun MatchScreen(
                 )
                 Text(
                     text = "CampusBall",
-                    color = colors.indigo,
+                    color = colors.skyblue,
                     style = typography.B_24.copy(fontSize = 40.sp)
                 )
                 Spacer(modifier = Modifier.height(9.dp))
