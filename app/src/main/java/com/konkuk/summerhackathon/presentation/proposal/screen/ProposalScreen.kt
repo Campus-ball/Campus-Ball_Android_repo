@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
+import com.konkuk.summerhackathon.data.dto.response.ReceivedMatchResponse
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.presentation.proposal.component.ProposalCard
 import com.konkuk.summerhackathon.presentation.proposal.viewmodel.ReceivedMatchViewModel
@@ -48,6 +49,43 @@ fun ProposalScreen(
 
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+
+    val testEvents = listOf(
+        ReceivedMatchResponse(
+            requestId = 2,
+            requestType = "랜덤 매칭 요청",
+            clubId = 305,
+            clubName = "동아리 이름1",
+            departmentName = "건국대학교 컴퓨터공학부",
+            clubLogoUrl = "https://example.com/logo1.png",
+        ),
+        ReceivedMatchResponse(
+            requestId = 3,
+            requestType = "친선 경기",
+            clubId = 306,
+            clubName = "동아리 이름2",
+            departmentName = "한양대학교 컴퓨터공학부",
+            clubLogoUrl = "https://example.com/logo2.png"
+        ),
+        ReceivedMatchResponse(
+            requestId = 4,
+            requestType = "랜덤 매칭 요청",
+            clubId = 307,
+            clubName = "동아리 이름3",
+            departmentName = "대대대학교 컴퓨터공학부",
+            clubLogoUrl = "https://example.com/logo3.png"
+        ),
+        ReceivedMatchResponse(
+            requestId = 5,
+            requestType = "친선 경기",
+            clubId = 308,
+            clubName = "동아리 이름4",
+            departmentName = "건국대학교 컴퓨터공학부",
+            clubLogoUrl = "https://example.com/logo4.png"
+        )
+
+    )
 
 
     LaunchedEffect(key1 = true) {
@@ -94,7 +132,7 @@ fun ProposalScreen(
                         .verticalScroll(scrollState),
                     verticalArrangement = Arrangement.spacedBy(15.dp),
                 ) {
-                    if (events.isEmpty()) {
+                    if (testEvents.isEmpty()) {
                         Spacer(modifier = Modifier.size(200.dp))
                         Text(
                             text = "받은 신청 내역이 없습니다.",
@@ -107,7 +145,8 @@ fun ProposalScreen(
                             ProposalCard(
                                 isRandomMatching = event.requestType == "랜덤 매칭 요청",
                                 onClickCard = {
-                                    navController.navigate(Route.ScheduleDetail.route)
+                                    navController.navigate("${Route.ProposalDetail.route}/${event.clubId}")
+//                                    navController.navigate(Route.ScheduleDetail.route)
                                 },
                                 modifier = Modifier.fillMaxWidth(),
                                 clubName = event.clubName,
@@ -123,7 +162,7 @@ fun ProposalScreen(
                           ProposalCard(isRandomMatching = true)
                           ProposalCard(isRandomMatching = true)
                           ProposalCard(isRandomMatching = true)
-                          ProposalCard(isRandomMatching = true)*/
+                          ProposalCard(isRandomMatching = true) */
                     Spacer(
                         modifier = Modifier.size(15.dp),
                     )

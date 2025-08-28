@@ -13,8 +13,10 @@ import com.konkuk.summerhackathon.data.repositoryimpl.UserRepositoryImpl
 import com.konkuk.summerhackathon.domain.repository.UserRepository
 import dagger.Binds
 import com.konkuk.summerhackathon.data.repositoryimpl.MatchRepositoryImpl
+import com.konkuk.summerhackathon.data.repositoryimpl.ProposalDetailRepositoryImpl
 import com.konkuk.summerhackathon.domain.repository.AvailabilityRepository
 import com.konkuk.summerhackathon.domain.repository.MatchRepository
+import com.konkuk.summerhackathon.domain.repository.ProposalDetailRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,9 +27,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
-//    @Binds
+    //    @Binds
 //    @Singleton
 //    abstract fun bindsHomeRepository(homeRepositoryImpl: HomeRepositoryImpl): HomeRepository
+    @Provides
+    @Singleton
+    fun provideProposalDetailRepository(impl: ProposalDetailRepositoryImpl): ProposalDetailRepository =
+        impl
 
     @Provides
     @Singleton
@@ -51,9 +57,11 @@ object RepositoryModule {
     @Singleton
     fun provideCollegeRepository(impl: CollegeRepositoryImpl): CollegeRepository = impl
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideDepartmentRepository(impl: DepartmentRepositoryImpl): DepartmentRepository = impl
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideUserRepository(impl: UserRepositoryImpl): UserRepository = impl
 }
