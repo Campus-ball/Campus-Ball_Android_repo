@@ -20,6 +20,7 @@ sealed class Route(
     data object MatchDetail : Route(route = "match_detail")
 
     data object Proposal : Route(route = "proposal")
+    data object ProposalDetail : Route(route = "proposal_detail")
 
     data object Settings : Route(route = "settings")
 }

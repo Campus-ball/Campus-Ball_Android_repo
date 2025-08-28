@@ -17,8 +17,6 @@ data class ReceivedMatchResponse(
     val departmentName: String,
     @SerialName("clubLogoUrl")
     val clubLogoUrl: String,
-    @SerialName("chatUrl")
-    val chatUrl: String
 )
 
 @Serializable
