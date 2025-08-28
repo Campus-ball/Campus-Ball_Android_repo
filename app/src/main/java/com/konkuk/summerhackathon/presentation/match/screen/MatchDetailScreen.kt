@@ -47,6 +47,7 @@ import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MatchDetailScreen(
@@ -67,6 +68,20 @@ fun MatchDetailScreen(
         if (otherTeamClicked) {
             vm.fetchRandomMatch()
             otherTeamClicked = false
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        vm.events.collectLatest { ev ->
+            when (ev) {
+                is MatchViewModel.Event.RequestSuccess -> {
+                    isMatchButtonClicked = true
+                }
+                is MatchViewModel.Event.Error -> {
+                    // 에러 모달/스낵바 표시
+                }
+                is MatchViewModel.Event.MatchFetched -> Unit
+            }
         }
     }
 
@@ -197,7 +212,7 @@ fun MatchDetailScreen(
                     .clip(shape = RoundedCornerShape(13.dp))
                     .background(colors.black, shape = RoundedCornerShape(13.dp))
                     .clickable {
-                        otherTeamClicked = true // → LaunchedEffect가 fetchRandomMatch() 호출
+                        otherTeamClicked = true
                     }
             ) {
                 Text(
@@ -216,7 +231,7 @@ fun MatchDetailScreen(
                     .height(53.dp)
                     .clip(shape = RoundedCornerShape(13.dp))
                     .background(colors.skyblue, shape = RoundedCornerShape(13.dp))
-                    .clickable { isMatchButtonClicked = true }
+                    .clickable { vm.requestMatch() }
             ) {
                 Text(
                     text = "제안하기",
