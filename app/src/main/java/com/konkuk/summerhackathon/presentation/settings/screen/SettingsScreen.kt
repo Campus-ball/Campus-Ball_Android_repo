@@ -316,17 +316,17 @@ private fun InactiveForm(
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
     ) {
-        DisabledField(label = "동아리 소속", value = ui.club)
+        DisabledField(label = "동아리 소속", value = ui.club, check = false)
         Spacer(modifier = Modifier.height(19.dp))
-        DisabledField(label = "이름", value = ui.name)
+        DisabledField(label = "이름", value = ui.name, check = false)
         Spacer(modifier = Modifier.height(19.dp))
-        DisabledField(label = "닉네임", value = ui.nickname)
+        DisabledField(label = "닉네임", value = ui.nickname, check = false)
         Spacer(modifier = Modifier.height(19.dp))
-        DisabledField(label = "성별", value = ui.gender)
+        DisabledField(label = "성별", value = ui.gender, check = false)
         Spacer(modifier = Modifier.height(19.dp))
-        DisabledField(label = "연락처", value = ui.contact)
+        DisabledField(label = "연락처", value = ui.contact, check = false)
         Spacer(modifier = Modifier.height(19.dp))
-        DisabledField(label = "카카오톡 오픈채팅", value = ui.kakaoOpenChat)
+        DisabledField(label = "카카오톡 오픈채팅", value = ui.kakaoOpenChat, check = false)
 
         Spacer(modifier = Modifier.height(31.dp))
         Box(
