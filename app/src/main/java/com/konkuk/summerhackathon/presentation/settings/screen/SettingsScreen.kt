@@ -36,6 +36,7 @@ import com.konkuk.summerhackathon.core.component.Gender
 import com.konkuk.summerhackathon.core.component.GenderSegmentedField
 import com.konkuk.summerhackathon.core.component.NameTextField
 import com.konkuk.summerhackathon.core.component.RequiredTextField
+import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.auth.component.SignUpValidators
 import com.konkuk.summerhackathon.presentation.settings.component.OutlinePillButton
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
@@ -72,7 +73,7 @@ fun SettingsScreen(
 
     Box(
         modifier = modifier.fillMaxSize()
-    ){
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -104,7 +105,7 @@ fun SettingsScreen(
             Box(
                 contentAlignment = Alignment.CenterEnd,
                 modifier = Modifier.fillMaxWidth()
-            ){
+            ) {
                 OutlinePillButton(
                     text = label,
                     enabled = enabled,
@@ -264,14 +265,48 @@ private fun InactiveForm(ui: MyAccountUi) {
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(19.dp)
     ) {
         DisabledField(label = "동아리 소속", value = ui.club)
+        Spacer(modifier = Modifier.height(19.dp))
         DisabledField(label = "이름", value = ui.name)
+        Spacer(modifier = Modifier.height(19.dp))
         DisabledField(label = "닉네임", value = ui.nickname)
+        Spacer(modifier = Modifier.height(19.dp))
         DisabledField(label = "성별", value = ui.gender)
+        Spacer(modifier = Modifier.height(19.dp))
         DisabledField(label = "연락처", value = ui.contact)
+        Spacer(modifier = Modifier.height(19.dp))
         DisabledField(label = "카카오톡 오픈채팅", value = ui.kakaoOpenChat)
+
+        Spacer(modifier = Modifier.height(31.dp))
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ){
+            Text(
+                text = "로그아웃",
+                style = typography.M_14,
+                color = colors.lightgray,
+                modifier = Modifier
+                    .noRippleClickable {  }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(22.dp))
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "탈퇴",
+                style = typography.M_14,
+                color = colors.lightgray,
+                modifier = Modifier
+                    .noRippleClickable {  }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(37.dp))
     }
 }
 
@@ -292,7 +327,7 @@ private fun DisabledField(
             modifier = Modifier
                 .height(41.dp)
                 .fillMaxWidth()
-                .background(color= colors.white, shape = RoundedCornerShape(10.dp))
+                .background(color = colors.white, shape = RoundedCornerShape(10.dp))
                 .border(width = 1.dp, color = colors.gray, shape = RoundedCornerShape(10.dp))
                 .padding(start = 11.dp),
             contentAlignment = Alignment.CenterStart
