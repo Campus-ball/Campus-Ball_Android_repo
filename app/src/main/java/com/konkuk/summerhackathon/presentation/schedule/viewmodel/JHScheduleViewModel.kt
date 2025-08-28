@@ -1,5 +1,6 @@
 package com.konkuk.summerhackathon.presentation.schedule.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.summerhackathon.data.dto.response.CalendarEventDto
@@ -39,6 +40,7 @@ class CalendarViewModel @Inject constructor(
                 calendarRepository.getCalendarEvents()
                     .onSuccess { fetchedEvents ->
                         _events.value = fetchedEvents
+                        Log.d("CalendarViewModel", "Fetched events: $fetchedEvents")
                     }
                     .onFailure { throwable ->
                         val errorMessage = throwable.message ?: "알 수 없는 오류가 발생했습니다."

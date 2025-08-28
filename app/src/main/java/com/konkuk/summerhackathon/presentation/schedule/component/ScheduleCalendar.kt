@@ -122,20 +122,20 @@ fun ScheduleCalendar(
             onMonthChanged = { newMonth ->
                 currentYearMonth = newMonth
             },
-            events = testEvents
+            events = testEvents     //TODO: 실제 이벤트값으로 나중에 변경
         )
-/*        Row {
-            Text(
-                text = "${currentYearMonth}-${selectedDateTime.dayOfMonth}일 : ",
-                style = typography.M_18,
-                color = colors.likeblack,
-            )
-            Text(
-                text = "일정",
-                style = typography.M_18,
-                color = colors.likeblack,
-            )
-        }*/
+        /*        Row {
+                    Text(
+                        text = "${currentYearMonth}-${selectedDateTime.dayOfMonth}일 : ",
+                        style = typography.M_18,
+                        color = colors.likeblack,
+                    )
+                    Text(
+                        text = "일정",
+                        style = typography.M_18,
+                        color = colors.likeblack,
+                    )
+                }*/
     }
 }
 
