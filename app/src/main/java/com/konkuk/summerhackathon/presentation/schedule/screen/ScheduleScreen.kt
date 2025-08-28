@@ -41,6 +41,7 @@ import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalendar
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleClubCard
 import com.konkuk.summerhackathon.presentation.schedule.viewmodel.CalendarViewModel
+import com.konkuk.summerhackathon.presentation.schedule.viewmodel.MatchViewModel
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 
@@ -51,13 +52,16 @@ fun ScheduleScreen(
     modifier: Modifier = Modifier,
     clubName: String = "KONKUK FC",
     navController: NavHostController,
-    viewModel: CalendarViewModel = hiltViewModel()
+    viewModel: CalendarViewModel = hiltViewModel(),
+    matchViewModel: MatchViewModel = hiltViewModel()
 ) {
 
     val events by viewModel.events.collectAsStateWithLifecycle()
+    val matchEvents by matchViewModel.events.collectAsStateWithLifecycle()
 
 
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val isMatchLoading by matchViewModel.isLoading.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 
@@ -70,7 +74,7 @@ fun ScheduleScreen(
             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
-    if (isLoading) {
+    if (isLoading || isMatchLoading) {
         CircularProgressIndicator()
     } else {
         Box(
@@ -144,6 +148,7 @@ fun ScheduleScreen(
             )
             Spacer(Modifier.height(10.dp))
 
+            // TODO: 값 불러오면 경기 성사 목록대로 카드 처리
 
             Column(
                 Modifier
