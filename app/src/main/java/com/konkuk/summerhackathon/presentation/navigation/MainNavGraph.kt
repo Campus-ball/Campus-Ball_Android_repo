@@ -97,7 +97,14 @@ fun MainNavGraph(
             ComponentLookUpScreen(modifier = modifier, navController = navController)
         }
 
-
+        composable(
+            route = "${Route.ComponentLookUp.route}/{clubId}",
+            arguments = listOf(navArgument("clubId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val clubId = backStackEntry.arguments?.getInt("clubId") ?: -1
+            ComponentLookUpScreen(modifier = modifier, navController = navController, clubId = clubId)
+            Log.d("ComponentLookUp requestId", clubId.toString())
+        }
 
 
         composable(route = Route.Match.route) {
