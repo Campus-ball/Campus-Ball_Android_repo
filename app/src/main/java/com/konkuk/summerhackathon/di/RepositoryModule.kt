@@ -6,6 +6,7 @@ import com.konkuk.summerhackathon.data.repositoryimpl.CalendarRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.ClubRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.CollegeRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.DepartmentRepositoryImpl
+import com.konkuk.summerhackathon.data.repositoryimpl.DuplCheckRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.ImageRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.MatchRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.MatchingRepositoryImpl
@@ -17,6 +18,7 @@ import com.konkuk.summerhackathon.domain.repository.CalendarRepository
 import com.konkuk.summerhackathon.domain.repository.ClubRepository
 import com.konkuk.summerhackathon.domain.repository.CollegeRepository
 import com.konkuk.summerhackathon.domain.repository.DepartmentRepository
+import com.konkuk.summerhackathon.domain.repository.DuplCheckRepository
 import com.konkuk.summerhackathon.domain.repository.ImageRepository
 import com.konkuk.summerhackathon.domain.repository.MatchRepository
 import com.konkuk.summerhackathon.domain.repository.MatchingRepository
@@ -34,6 +36,10 @@ object RepositoryModule {
     //    @Binds
 //    @Singleton
 //    abstract fun bindsHomeRepository(homeRepositoryImpl: HomeRepositoryImpl): HomeRepository
+
+    @Provides
+    @Singleton
+    fun provideDuplCheckRepository(impl: DuplCheckRepositoryImpl): DuplCheckRepository = impl
 
     @Provides
     @Singleton

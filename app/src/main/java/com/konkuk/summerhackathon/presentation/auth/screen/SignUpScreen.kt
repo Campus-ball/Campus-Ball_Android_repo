@@ -1,5 +1,6 @@
 package com.konkuk.summerhackathon.presentation.auth.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,16 +23,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.auth.component.ClubRoleTabs
 import com.konkuk.summerhackathon.presentation.auth.component.LeaderForm
 import com.konkuk.summerhackathon.presentation.auth.component.MemberForm
+import com.konkuk.summerhackathon.presentation.auth.viewmodel.DuplCheckViewModel
 import com.konkuk.summerhackathon.presentation.auth.viewmodel.ImageUploadViewModel
 import com.konkuk.summerhackathon.presentation.auth.viewmodel.SignUpViewModel
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
@@ -45,11 +50,14 @@ fun SignUpScreen(
     navController: NavHostController,
     vm: SignUpViewModel = androidx.hilt.navigation.compose.hiltViewModel(),
 ) {
+    val context = LocalContext.current
+
     val uploadVm: ImageUploadViewModel = hiltViewModel()
     var role by rememberSaveable { mutableStateOf(ClubRole.Leader) }
 
     val colleges by vm.colleges.collectAsState()
     val departments by vm.departments.collectAsState()
+
 
     LaunchedEffect(Unit) {
         vm.events.collect { ev ->
@@ -62,7 +70,7 @@ fun SignUpScreen(
                 }
 
                 is SignUpViewModel.Event.Error -> {
-                    // TODO: 스낵바/토스트
+                    Toast.makeText(context, "에러가 발생하였습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -122,8 +130,16 @@ fun SignUpScreen(
                     onCollegeSelected = { id -> vm.loadDepartments(id) },
                     uploadVm = uploadVm
                 )
+
             ClubRole.Member ->
                 MemberForm(navController = navController)
         }
     }
+}
+
+@Preview
+@Composable
+private fun SignUpScreenPreview() {
+    val navController = rememberNavController()
+    SignUpScreen(navController = navController)
 }
