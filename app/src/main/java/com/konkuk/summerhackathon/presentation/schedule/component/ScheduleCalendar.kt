@@ -6,8 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -42,6 +44,8 @@ fun ScheduleCalendar(
     modifier: Modifier = Modifier,
     events: List<CalendarEventDto> = emptyList()
 ) {
+
+    // MATCH가 빨강, AVAILABILITY가 노랑,  ACADEMIC가 파랑
 
     val testEvents = listOf(
         CalendarEventDto(
@@ -100,9 +104,18 @@ fun ScheduleCalendar(
         )
     )
 
-
     var currentYearMonth by remember { mutableStateOf(YearMonth.now()) }
     var selectedDateTime by remember { mutableStateOf(LocalDateTime.now()) }
+
+
+    val eventsForSelectedDate = remember(selectedDateTime, events) {
+        val selectedDate = selectedDateTime.toLocalDate()
+        events.filter { event ->
+            val startDate = LocalDate.parse(event.startDate)
+            val endDate = LocalDate.parse(event.endDate)
+            !selectedDate.isBefore(startDate) && !selectedDate.isAfter(endDate)
+        }
+    }
 
     Column(
         modifier = modifier
@@ -121,20 +134,61 @@ fun ScheduleCalendar(
             onMonthChanged = { newMonth ->
                 currentYearMonth = newMonth
             },
-            events = events     //TODO: 실제 이벤트값으로 나중에 변경
+            events = events
         )
-        /*        Row {
-                    Text(
-                        text = "${currentYearMonth}-${selectedDateTime.dayOfMonth}일 : ",
-                        style = typography.M_18,
-                        color = colors.likeblack,
-                    )
-                    Text(
-                        text = "일정",
-                        style = typography.M_18,
-                        color = colors.likeblack,
-                    )
-                }*/
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Column(Modifier.padding(horizontal = 7.dp)) {
+            Text(
+                text = "${selectedDateTime.monthValue}월 ${selectedDateTime.dayOfMonth}일 일정",
+                style = typography.B_11,
+                color = colors.likeblack,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            if (eventsForSelectedDate.isEmpty()) {
+                Text(
+                    text = "선택된 날짜에 일정이 없습니다.",
+                    style = typography.M_14,
+                    color = Color.Gray
+                )
+            } else {
+                LazyColumn(modifier = Modifier.heightIn(max = 200.dp)) { // UI가 너무 길어지는 것을 방지
+                    items(eventsForSelectedDate) { event ->
+                        EventItem(event = event)
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+    }
+}
+
+@Composable
+fun EventItem(event: CalendarEventDto, modifier: Modifier = Modifier) {
+    val eventColor = when (event.eventType) {
+        EventType.MATCH -> Color(0xFFF04D23)        // 빨강
+        EventType.AVAILABILITY -> Color(0xFFF9C433) // 노랑
+        EventType.ACADEMIC -> Color(0xFF33B4F9)      // 파랑
+    }
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(10.dp)
+                .background(color = eventColor, shape = CircleShape)
+        )
+        Spacer(modifier = Modifier.width(9.dp))
+        Text(
+            text = "${event.title} : ${event.startTime} ~ ${event.endTime}",
+            style = typography.M_18.copy(fontSize = 16.sp)
+        )
     }
 }
 
@@ -235,6 +289,7 @@ fun CalendarGrid(
         contentPadding = PaddingValues(vertical = 4.dp)
     ) {
         items(startOffset) { Box(modifier = Modifier.aspectRatio(1f)) }
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
         items(daysInMonth) { dayOfMonth ->
             val day = dayOfMonth + 1
@@ -252,7 +307,6 @@ fun CalendarGrid(
                         }
             */
 
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
             val hasAcademyEvent = events.any { event ->
                 val start = LocalDate.parse(event.startDate, formatter)
