@@ -1,6 +1,7 @@
 package com.konkuk.summerhackathon.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,6 +13,7 @@ import com.konkuk.summerhackathon.presentation.match.screen.MatchScreen
 import com.konkuk.summerhackathon.presentation.proposal.screen.ProposalScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleDetailScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleScreen
+import com.konkuk.summerhackathon.presentation.settings.screen.MyAccountUi
 import com.konkuk.summerhackathon.presentation.settings.screen.SettingsScreen
 
 @Composable
@@ -66,7 +68,21 @@ fun MainNavGraph(
         }
 
         composable(route = Route.Settings.route){
-            SettingsScreen(modifier = modifier)
+            val dummyUi = remember {
+                MyAccountUi(
+                    club = "A 동아리",
+                    name = "홍길동",
+                    nickname = "배고픈 하마",
+                    gender = "남자",
+                    contact = "010-4171-2876",
+                    kakaoOpenChat = "http://12341234"
+                )
+            }
+
+            SettingsScreen(
+                ui = dummyUi,
+                modifier = modifier
+            )
         }
     }
 }

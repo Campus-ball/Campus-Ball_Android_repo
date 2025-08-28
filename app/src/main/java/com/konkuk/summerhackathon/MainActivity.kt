@@ -67,6 +67,7 @@ class MainActivity : ComponentActivity() {
 
                 val backArrowRoutes = setOf(
                     Route.ScheduleDetail.route,
+                    Route.Settings.route
                 )
 
 
