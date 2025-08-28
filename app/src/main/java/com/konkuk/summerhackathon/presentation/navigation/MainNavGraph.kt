@@ -13,6 +13,7 @@ import com.konkuk.summerhackathon.presentation.auth.screen.SignUpScreen
 import com.konkuk.summerhackathon.presentation.clublookup.screen.CollegeLookUpScreen
 import com.konkuk.summerhackathon.presentation.clublookup.screen.ClubLookUpScreen
 import com.konkuk.summerhackathon.presentation.clublookup.screen.ComponentLookUpScreen
+import com.konkuk.summerhackathon.presentation.match.screen.MatchDetailScreen
 import com.konkuk.summerhackathon.presentation.match.screen.MatchScreen
 import com.konkuk.summerhackathon.presentation.proposal.screen.ProposalScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleAvailableScreen
@@ -100,7 +101,10 @@ fun MainNavGraph(
 
 
         composable(route = Route.Match.route) {
-            MatchScreen(modifier = modifier)
+            MatchScreen(
+                modifier = modifier,
+                navController = navController
+            )
         }
 
         composable(route = Route.Proposal.route) {
@@ -121,6 +125,13 @@ fun MainNavGraph(
 
             SettingsScreen(
                 ui = dummyUi,
+                modifier = modifier,
+                navController = navController
+            )
+        }
+
+        composable(route = Route.MatchDetail.route) {
+            MatchDetailScreen(
                 modifier = modifier,
                 navController = navController
             )

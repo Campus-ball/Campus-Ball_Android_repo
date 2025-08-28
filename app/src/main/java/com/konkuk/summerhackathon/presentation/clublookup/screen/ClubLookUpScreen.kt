@@ -20,11 +20,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
-import com.konkuk.summerhackathon.presentation.clublookup.component.ClubLookUpCard
+import com.konkuk.summerhackathon.core.component.ClubLookUpCard
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography

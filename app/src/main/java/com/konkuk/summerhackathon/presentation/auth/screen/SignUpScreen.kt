@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.R
+import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.auth.component.ClubRoleTabs
 import com.konkuk.summerhackathon.presentation.auth.component.LeaderForm
@@ -54,6 +55,8 @@ fun SignUpScreen(
             )
             .padding(horizontal = 21.dp)
     ) {
+        CampusBallTopBar()
+
         Spacer(modifier = Modifier.height(21.dp))
         Box(
             modifier = Modifier

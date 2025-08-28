@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
-import com.konkuk.summerhackathon.presentation.clublookup.component.ClubLookUpCard
+import com.konkuk.summerhackathon.core.component.ClubLookUpCard
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalendar
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
