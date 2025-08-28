@@ -18,12 +18,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.core.component.DuplicateTextField
 import com.konkuk.summerhackathon.core.component.FormActionButton
 import com.konkuk.summerhackathon.core.component.Gender
 import com.konkuk.summerhackathon.core.component.GenderSegmentedField
 import com.konkuk.summerhackathon.core.component.NameTextField
+import com.konkuk.summerhackathon.presentation.auth.viewmodel.DuplCheckViewModel
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
@@ -41,7 +43,8 @@ data class MemberSignUpData(
 fun MemberForm(
     modifier: Modifier = Modifier,
     onSubmit: (MemberSignUpData) -> Unit = {},
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: DuplCheckViewModel = hiltViewModel(),
 ) {
     val clubs = listOf(
         "HAM",
@@ -170,15 +173,21 @@ fun MemberForm(
             )
 
             Spacer(modifier = Modifier.height(6.dp))
-            DuplicateTextField(
-                title = "닉네임",
-                placeholder = "닉네임을 입력하세요",
-                text = nicknameInput,
-                onTextChange = { nicknameInput = it },
-                onConfirmed = { confirmed -> nicknameConfirmed = confirmed },
-                dummyTakenNicknames = setOf("배고픈 하마"),
-                error = "닉네임 중복 입니다"
-            )
+//            DuplicateTextField(
+//                title = "닉네임",
+//                placeholder = "닉네임을 입력하세요",
+//                text = nicknameInput,
+//                onTextChange = { nicknameInput = it },
+//                onConfirmed = { confirmed -> nicknameConfirmed = confirmed },
+//                error = "닉네임 중복 입니다",
+//                serverCheck = { value ->
+//                    if (value.isNotBlank()) {
+//                        isCheckingNickname = true
+//                        viewModel.checkNickname(value)
+//                    }
+//                },
+//                checkState = nicknameCheckState()
+//            )
 
             Spacer(modifier = Modifier.height(6.dp))
             GenderSegmentedField(
@@ -187,15 +196,21 @@ fun MemberForm(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            DuplicateTextField(
-                title = "아이디",
-                placeholder = "아이디를 입력하세요",
-                text = userId,
-                onTextChange = { userId = it },
-                onConfirmed = { confirmed -> userIdConfirmed = confirmed },
-                dummyTakenNicknames = setOf("hungry"),
-                error = "아이디 중복 입니다"
-            )
+//            DuplicateTextField(
+//                title = "아이디",
+//                placeholder = "아이디를 입력하세요",
+//                text = userId,
+//                onTextChange = { userId = it },
+//                onConfirmed = { confirmed -> userIdConfirmed = confirmed },
+//                error = "아이디 중복 입니다",
+//                serverCheck = { value ->
+//                    if (value.isNotBlank()) {
+//                        isCheckingUserId = true
+//                        viewModel.checkUserId(value)
+//                    }
+//                },
+//                checkState = userIdCheckState()
+//            )
 
             Spacer(modifier = Modifier.height(6.dp))
             PasswordFields(
