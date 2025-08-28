@@ -179,10 +179,9 @@ fun ScheduleAvailableScreen(
                         Log.d("포맷된 끝나는 시간", "$formattedEnd")
 
                         viewModel.registerAvailability(
-                            AvailabilityRequest("2025-08-25", "15:00", "17:00", false)
+                            AvailabilityRequest(formattedDate, formattedStart, formattedEnd, false)
                         )
 
-                        // TODO: api 연결 후 확인해봐야 함
 //                        navController.navigate(Route.Schedule.route)
                     } else {
                         Toast.makeText(
