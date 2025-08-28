@@ -3,6 +3,7 @@ package com.konkuk.summerhackathon.presentation.schedule.component
 import android.app.TimePickerDialog
 import android.text.format.DateFormat
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -46,6 +47,7 @@ fun TimeInputField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(41.dp)
+                .background(colors.white, RoundedCornerShape(10.dp))
                 .clip(RoundedCornerShape(10.dp))
                 .border(1.dp, colors.indigo, RoundedCornerShape(10.dp))
                 .clickable {
@@ -113,7 +115,9 @@ private fun formatTime(hour24: Int, minute: Int, is24: Boolean): String {
         "%02d:%02d".format(hour24, minute)
     } else {
         val ap = if (hour24 < 12) "AM" else "PM"
-        val h12 = when (hour24 % 12) { 0 -> 12; else -> hour24 % 12 }
+        val h12 = when (hour24 % 12) {
+            0 -> 12; else -> hour24 % 12
+        }
         "%s %d:%02d".format(ap, h12, minute)
     }
 }

@@ -43,6 +43,7 @@ fun ScheduleClubCard(
     universityAndMajor: String = "OO대학교 OOO학과",
     kakaoTalkLink: String = "카카오톡 링크 복사 테스트값",
     isRandomMatching: Boolean = false,
+    onClickCard: () -> Unit = {}
 ) {
     val clipboardManager = LocalClipboardManager.current
 
@@ -62,10 +63,14 @@ fun ScheduleClubCard(
                     .fillMaxWidth()
                     .padding(end = 5.dp)
                     .heightIn(min = 110.dp)
+                    .clip(RoundedCornerShape(size = 25.dp))
                     .background(
                         color = Color(0xFFFDFDFD),
                         shape = RoundedCornerShape(size = 25.dp)
                     )
+                    .clickable {
+                        onClickCard()
+                    }
             ) {
                 Row(
                     modifier = Modifier
@@ -103,10 +108,10 @@ fun ScheduleClubCard(
                             modifier = Modifier
                                 .height(22.dp)
                                 .widthIn(min = 148.dp)
-                                .noRippleClickable {
+                                .clip(RoundedCornerShape(5.dp))
+                                .clickable() {
                                     clipboardManager.setText(AnnotatedString(kakaoTalkLink))
                                 }
-                                .clip(RoundedCornerShape(5.dp))
                                 .background(colors.yellow, RoundedCornerShape(5.dp))
                         ) {
                             Text(

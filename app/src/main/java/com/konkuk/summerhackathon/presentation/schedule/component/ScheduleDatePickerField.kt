@@ -2,6 +2,7 @@ package com.konkuk.summerhackathon.presentation.schedule.component
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,6 +58,7 @@ fun DateInputField(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(colors.white, RoundedCornerShape(10.dp))
                 .height(41.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .border(1.dp, colors.indigo, RoundedCornerShape(10.dp))
