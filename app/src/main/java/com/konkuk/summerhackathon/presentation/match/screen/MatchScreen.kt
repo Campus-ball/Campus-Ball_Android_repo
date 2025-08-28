@@ -1,5 +1,12 @@
 package com.konkuk.summerhackathon.presentation.match.screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,10 +35,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.presentation.match.component.LoadingModal
@@ -57,10 +66,17 @@ fun MatchScreen(
     navController: NavHostController
 ) {
     val randomSlogan = remember { slogans.random() }
+    var visible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        visible = true
+    }
 
     Box(
-        modifier = modifier.fillMaxSize().zIndex(1f)
-    ){
+        modifier = modifier
+            .fillMaxSize()
+            .zIndex(1f)
+    ) {
         CampusBallTopBar()
     }
     Box(
@@ -75,79 +91,108 @@ fun MatchScreen(
                     )
                 )
             )
-            .verticalScroll(rememberScrollState())
-        ,
+            .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.TopCenter
     ) {
         Spacer(modifier = Modifier.height(52.dp))
         Image(
             painter = painterResource(R.drawable.img_match_logo),
             contentDescription = null,
-            modifier = Modifier.size(400.dp).padding(top = 104.dp)
+            modifier = Modifier
+                .size(390.dp)
+                .padding(top = 84.dp)
         )
 
-        Box(
+        AnimatedVisibility(
+            visible = visible,
+            enter = slideInVertically(
+                initialOffsetY = { fullHeight -> fullHeight },
+                animationSpec = tween(durationMillis = 500, easing = LinearOutSlowInEasing)
+            ) + fadeIn(
+                animationSpec = tween(durationMillis = 500)
+            ),
+            exit = slideOutVertically(
+                targetOffsetY = { fullHeight -> fullHeight },
+                animationSpec = tween(durationMillis = 500)
+            ) + fadeOut(
+                animationSpec = tween(durationMillis = 500)
+            ),
             modifier = Modifier
-                .padding(top = 400.dp, start = 30.dp, end = 30.dp)
                 .fillMaxWidth()
-                .height(400.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(colors.white)
-        ){
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+                .align(Alignment.BottomCenter)
+        ) {
+            Box(
                 modifier = Modifier
+                    .padding(top = 360.dp, start = 30.dp, end = 30.dp)
                     .fillMaxWidth()
-            ){
-                Spacer(modifier = Modifier.height(47.dp))
-                Text(
-                    text = "Welcome to",
-                    color = colors.black,
-                    style = typography.M_18.copy(fontSize = 38.sp)
-                )
-                Text(
-                    text = "CampusBall",
-                    color = colors.skyblue,
-                    style = typography.B_24.copy(fontSize = 40.sp)
-                )
-                Spacer(modifier = Modifier.height(9.dp))
-                Text(
-                    text = randomSlogan,
-                    color = colors.gray,
-                    style = typography.L_10.copy(fontSize = 18.sp)
-                )
-
-                Spacer(modifier = Modifier.height(55.dp))
-                Box(
-                    contentAlignment = Alignment.Center,
+                    .height(380.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(colors.white)
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .height(90.dp)
                         .fillMaxWidth()
-                        .padding(horizontal = 40.dp)
-                        .background(colors.skyblue, shape = RoundedCornerShape(100.dp))
-                        .clickable {
-                            navController.navigate(Route.MatchDetail.route)
+                ) {
+                    Spacer(modifier = Modifier.height(47.dp))
+                    Text(
+                        text = "Welcome to",
+                        color = colors.black,
+                        style = typography.M_18.copy(fontSize = 38.sp)
+                    )
+                    Text(
+                        text = "CampusBall",
+                        color = colors.skyblue,
+                        style = typography.B_24.copy(fontSize = 40.sp)
+                    )
+                    Spacer(modifier = Modifier.height(9.dp))
+                    Text(
+                        text = randomSlogan,
+                        color = colors.gray,
+                        style = typography.L_10.copy(fontSize = 18.sp)
+                    )
+
+                    Spacer(modifier = Modifier.height(40.dp))
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .height(90.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 40.dp)
+                            .background(colors.skyblue, shape = RoundedCornerShape(100.dp))
+                            .clickable {
+                                navController.navigate(Route.MatchDetail.route)
+                            }
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "동아리 친선전",
+                                color = colors.white,
+                                style = typography.B_17
+                            )
+                            Text(
+                                text = "신청하기",
+                                color = colors.white,
+                                style = typography.B_17
+                            )
                         }
-                ){
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxWidth()
-                    ){
-                        Text(
-                            text = "동아리 친선전",
-                            color = colors.white,
-                            style = typography.B_17
-                        )
-                        Text(
-                            text = "신청하기",
-                            color = colors.white,
-                            style = typography.B_17
-                        )
                     }
                 }
+
 
             }
         }
     }
 
+}
+
+@Preview
+@Composable
+private fun MatchScreenPreview() {
+    val navController = rememberNavController()
+    MatchScreen(navController = navController)
 }
