@@ -30,7 +30,7 @@ fun MainNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Route.ScheduleAvailable.route,
+        startDestination = Route.Login.route,
     ) {
         composable(route = Route.Login.route) {
             LoginScreen(
