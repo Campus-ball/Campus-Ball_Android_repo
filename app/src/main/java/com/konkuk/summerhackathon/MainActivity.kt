@@ -1,9 +1,11 @@
 package com.konkuk.summerhackathon
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +41,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -53,7 +55,7 @@ class MainActivity : ComponentActivity() {
 
                 val bottomNavItems = listOf(
                     BottomNavItem("일정", Route.Schedule.route, R.drawable.ic_schedule_un),
-                    BottomNavItem("동아리 조회", Route.ClubLookUp.route, R.drawable.ic_clublookup_un),
+                    BottomNavItem("동아리 조회", Route.CollegeLookUp.route, R.drawable.ic_clublookup_un),
                     BottomNavItem("매칭", Route.Match.route, R.drawable.ic_match_un),
                     BottomNavItem("제안 확인", Route.Proposal.route, R.drawable.ic_proposal_un),
                     BottomNavItem("설정", Route.Settings.route, R.drawable.ic_settings_un)
@@ -67,6 +69,8 @@ class MainActivity : ComponentActivity() {
 
                 val backArrowRoutes = setOf(
                     Route.ScheduleDetail.route,
+                    Route.ScheduleAvailable.route,
+                    Route.ClubLookUp.route,
                 )
 
 
@@ -92,7 +96,7 @@ class MainActivity : ComponentActivity() {
 
                                         val iconRes = when (item.route) {
                                             Route.Schedule.route -> if (selected) R.drawable.ic_schedule else item.icon
-                                            Route.ClubLookUp.route -> if (selected) R.drawable.ic_clublookup else item.icon
+                                            Route.CollegeLookUp.route -> if (selected) R.drawable.ic_clublookup else item.icon
                                             Route.Match.route -> if (selected) R.drawable.ic_match else item.icon
                                             Route.Proposal.route -> if (selected) R.drawable.ic_proposal else item.icon
                                             Route.Settings.route -> if (selected) R.drawable.ic_settings else item.icon
