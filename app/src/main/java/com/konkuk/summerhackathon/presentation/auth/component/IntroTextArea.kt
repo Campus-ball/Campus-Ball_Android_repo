@@ -1,6 +1,7 @@
 package com.konkuk.summerhackathon.presentation.auth.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -36,7 +37,9 @@ fun IntroTextArea(
     val scroll = rememberScrollState()
     val border = BorderStroke(1.5.dp, colors.indigo)
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         Text(label, style = typography.EB_12, color = colors.black)
         Spacer(Modifier.height(6.dp))
 
@@ -44,6 +47,7 @@ fun IntroTextArea(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(border, shape)
+                .background(colors.white, shape)
                 .clip(shape)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {

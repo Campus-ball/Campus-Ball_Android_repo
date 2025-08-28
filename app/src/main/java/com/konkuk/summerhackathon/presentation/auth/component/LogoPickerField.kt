@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -69,7 +70,9 @@ fun LogoPickerField(
         }
     }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         Text(text = label, style = typography.EB_12, color = colors.black)
         Spacer(Modifier.height(6.dp))
 
@@ -79,6 +82,7 @@ fun LogoPickerField(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = minHeight)
+                .background(colors.white, shape)
                 .border(border, shape)
                 .clip(shape)
                 .noRippleClickable { openPicker() }

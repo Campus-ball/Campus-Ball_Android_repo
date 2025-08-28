@@ -1,4 +1,4 @@
-package com.konkuk.summerhackathon.presentation.auth.component
+package com.konkuk.summerhackathon.core.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -29,7 +29,9 @@ fun GenderSegmentedField(
     outerShape: RoundedCornerShape = RoundedCornerShape(14.dp),
     innerShape: RoundedCornerShape = RoundedCornerShape(12.dp)
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         Text(text = label, style = typography.EB_12, color = colors.black)
 
         Spacer(Modifier.height(6.dp))
@@ -38,9 +40,10 @@ fun GenderSegmentedField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height)
+                .background(colors.white, outerShape)
                 .border(BorderStroke(1.5.dp, colors.indigo), outerShape)
                 .clip(outerShape)
-                .padding(4.dp), // 안쪽 칩과 테두리 사이 여백
+                .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Segment(

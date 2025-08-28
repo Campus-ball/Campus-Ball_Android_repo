@@ -1,6 +1,7 @@
-package com.konkuk.summerhackathon.presentation.auth.component
+package com.konkuk.summerhackathon.core.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,7 +50,9 @@ fun NameTextField(
         else -> null
     }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -67,6 +70,7 @@ fun NameTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = minHeight)
+                .background(colors.white, shape)
                 .border(border, shape)
                 .clip(shape)
                 .padding(horizontal = 16.dp, vertical = 12.dp)

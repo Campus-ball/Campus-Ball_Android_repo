@@ -1,4 +1,4 @@
-package com.konkuk.summerhackathon.presentation.auth.component
+package com.konkuk.summerhackathon.core.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -51,7 +51,7 @@ fun FormActionButton(
             .height(height)
             .clip(shape)
             .border(BorderStroke(2.dp, borderColor), shape)
-            .background(Color.Transparent)
+            .background(colors.white)
             .noRippleClickable {
                 if (enabled) onClick() else showDialog = true
             },
