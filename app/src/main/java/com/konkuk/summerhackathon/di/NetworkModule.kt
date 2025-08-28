@@ -24,7 +24,7 @@ object NetworkModule {
     @Singleton
     fun providesOkHttpClient(
         authInterceptor: AuthInterceptor,
-        tokenAuthenticator: TokenAuthenticator
+        //tokenAuthenticator: TokenAuthenticator
     ): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -33,7 +33,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(logging)           // 네트워크 로그
             .addInterceptor(authInterceptor)   // AccessToken 자동 첨부
-            .authenticator(tokenAuthenticator) // 401 발생 시 refresh → 재요청
+            //.authenticator(tokenAuthenticator) // 401 발생 시 refresh → 재요청
             .build()
     }
 

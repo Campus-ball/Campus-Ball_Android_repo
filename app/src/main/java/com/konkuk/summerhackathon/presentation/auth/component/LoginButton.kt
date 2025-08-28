@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -37,6 +38,7 @@ fun LoginButton(
                     size = Size(size.width, size.height)
                 )
             }
+            .clip(RoundedCornerShape(100.dp))
             .background(
                 color = if (enabled) colors.skyblue else colors.gray,
                 shape = RoundedCornerShape(100.dp)
