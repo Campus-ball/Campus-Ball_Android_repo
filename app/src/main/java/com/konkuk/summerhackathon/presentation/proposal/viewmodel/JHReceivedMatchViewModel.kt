@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.summerhackathon.data.dto.request.MatchRequest
+import com.konkuk.summerhackathon.data.dto.request.MatchSendRequest
 import com.konkuk.summerhackathon.data.dto.response.ReceivedMatchResponse
 import com.konkuk.summerhackathon.domain.repository.MatchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -93,6 +94,28 @@ class ReceivedMatchViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _error.emit("매치 거절 에러: ${e.message}")
+                _actionResult.emit(false)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    // 친선 경기 신청 보내기
+    fun sendMatch(request: MatchSendRequest) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val code = repository.sendMatch(request)
+                if (code == 200) {
+                    _actionResult.emit(true)
+                    fetchMatchProposals() // 새로고침
+                } else {
+                    _error.emit("친선 경기 신청 실패 (code: $code)")
+                    _actionResult.emit(false)
+                }
+            } catch (e: Exception) {
+                _error.emit("친선 경기 신청 에러: ${e.message}")
                 _actionResult.emit(false)
             } finally {
                 _isLoading.value = false

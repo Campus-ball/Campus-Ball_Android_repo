@@ -36,13 +36,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.core.component.SuccessModal
 import com.konkuk.summerhackathon.core.component.ClubLookUpCard
+import com.konkuk.summerhackathon.data.dto.request.MatchSendRequest
 import com.konkuk.summerhackathon.presentation.navigation.Route
+import com.konkuk.summerhackathon.presentation.proposal.viewmodel.ReceivedMatchViewModel
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalendar
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
@@ -54,6 +57,7 @@ import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 fun ComponentLookUpScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    viewModel: ReceivedMatchViewModel = hiltViewModel()
 ) {
     val screenScrollState = rememberScrollState()
     var isMatchButtonClicked by remember { mutableStateOf(false) }
@@ -223,6 +227,8 @@ fun ComponentLookUpScreen(
         Spacer(Modifier.height(91.dp))
     }
     if (isMatchButtonClicked) {
+//        viewModel.sendMatch( request = MatchSendRequest(clubId=0))
+        // clubId에다가 값 넣기
         SuccessModal(value = "친선 경기 신청에 성공하였습니다!", buttonValue = "홈화면으로 이동", onClick = {
             navController.navigate(Route.Match.route)
         })

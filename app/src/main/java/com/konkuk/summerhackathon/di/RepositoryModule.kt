@@ -7,6 +7,7 @@ import com.konkuk.summerhackathon.data.repositoryimpl.CollegeRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.DepartmentRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.MatchRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.MatchingRepositoryImpl
+import com.konkuk.summerhackathon.data.repositoryimpl.ProposalDetailRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.UserRepositoryImpl
 import com.konkuk.summerhackathon.domain.repository.AuthRepository
 import com.konkuk.summerhackathon.domain.repository.AvailabilityRepository
@@ -15,18 +16,8 @@ import com.konkuk.summerhackathon.domain.repository.CollegeRepository
 import com.konkuk.summerhackathon.domain.repository.DepartmentRepository
 import com.konkuk.summerhackathon.domain.repository.MatchRepository
 import com.konkuk.summerhackathon.domain.repository.MatchingRepository
-import com.konkuk.summerhackathon.domain.repository.UserRepository
-import com.konkuk.summerhackathon.domain.repository.CalendarRepository
-import com.konkuk.summerhackathon.domain.repository.CollegeRepository
-import com.konkuk.summerhackathon.domain.repository.DepartmentRepository
-import com.konkuk.summerhackathon.data.repositoryimpl.UserRepositoryImpl
-import com.konkuk.summerhackathon.domain.repository.UserRepository
-import dagger.Binds
-import com.konkuk.summerhackathon.data.repositoryimpl.MatchRepositoryImpl
-import com.konkuk.summerhackathon.data.repositoryimpl.ProposalDetailRepositoryImpl
-import com.konkuk.summerhackathon.domain.repository.AvailabilityRepository
-import com.konkuk.summerhackathon.domain.repository.MatchRepository
 import com.konkuk.summerhackathon.domain.repository.ProposalDetailRepository
+import com.konkuk.summerhackathon.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
