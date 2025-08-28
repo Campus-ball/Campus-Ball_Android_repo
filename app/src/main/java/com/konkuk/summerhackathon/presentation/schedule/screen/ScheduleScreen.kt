@@ -8,12 +8,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -37,6 +40,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.data.dto.response.CalendarEventDto
+import com.konkuk.summerhackathon.data.dto.response.MatchResponse
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalendar
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleClubCard
@@ -67,6 +71,46 @@ fun ScheduleScreen(
 
     val screenScrollState = rememberScrollState()
     val scrollState = rememberScrollState()
+
+    val testMatchEvents = listOf(
+        MatchResponse(
+            matchId = 1,
+            matchType = "랜덤 매칭 요청",
+            clubId = 1,
+            clubName = "FC 서울",
+            departmentName = "서울대학교 축구동아리",
+            clubLogoUrl = "",
+            chatUrl = "https://open.kakao.com/o/sdfasdf"
+        ),
+        MatchResponse(
+            matchId = 2,
+            matchType = "친선 경기",
+            clubId = 2,
+            clubName = "부산 아이파크",
+            departmentName = "부산대학교 축구동아리",
+            clubLogoUrl = "",
+            chatUrl = "https://open.kakao.com/o/sdfasdf"
+        ),
+        MatchResponse(
+            matchId = 3,
+            matchType = "랜덤 매칭 요청",
+            clubId = 3,
+            clubName = "대전 시티즌",
+            departmentName = "대전대학교 축구동아리",
+            clubLogoUrl = "",
+            chatUrl = "https://open.kakao.com/o/sdfasdf"
+        ),
+        MatchResponse(
+            matchId = 4,
+            matchType = "친선 경기",
+            clubId = 4,
+            clubName = "광주 FC",
+            departmentName = "광주대학교 축구동아리",
+            clubLogoUrl = "",
+            chatUrl = "https://open.kakao.com/o/sdfasdf"
+        )
+    )
+
 
 
     LaunchedEffect(key1 = true) {
@@ -148,43 +192,70 @@ fun ScheduleScreen(
             )
             Spacer(Modifier.height(10.dp))
 
-            // TODO: 값 불러오면 경기 성사 목록대로 카드 처리
+            /*            Column(
+                            Modifier
+                                .padding(horizontal = 24.dp),
+            //                .heightIn(max = 500.dp),
+            //                .verticalScroll(scrollState),
+                            verticalArrangement = Arrangement.spacedBy(15.dp),
+                        ) {
+                            ScheduleClubCard(
+                                isRandomMatching = true,
+                                onClickCard = {
+                                    navController.navigate(Route.ScheduleDetail.route)
+                                },
+                            )
+                            ScheduleClubCard(onClickCard = {
+                                navController.navigate(Route.ScheduleDetail.route)
+                            })
+                            ScheduleClubCard(onClickCard = {
+                                navController.navigate(Route.ScheduleDetail.route)
+                            })
+                            ScheduleClubCard(isRandomMatching = true, onClickCard = {
+                                navController.navigate(Route.ScheduleDetail.route)
+                            })
+                            ScheduleClubCard(isRandomMatching = true, onClickCard = {
+                                navController.navigate(Route.ScheduleDetail.route)
+                            })
+                            ScheduleClubCard(isRandomMatching = true, onClickCard = {
+                                navController.navigate(Route.ScheduleDetail.route)
+                            })
+                            ScheduleClubCard(isRandomMatching = true, onClickCard = {
+                                navController.navigate(Route.ScheduleDetail.route)
+                            })
+                            Spacer(
+                                modifier = Modifier.size(15.dp),
+                            )
+                        }*/
+
 
             Column(
-                Modifier
-                    .padding(horizontal = 24.dp),
-//                .heightIn(max = 500.dp),
-//                .verticalScroll(scrollState),
-                verticalArrangement = Arrangement.spacedBy(15.dp),
+                Modifier.padding(horizontal = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                ScheduleClubCard(isRandomMatching = true, onClickCard = {
-                    navController.navigate(Route.ScheduleDetail.route)
-                })
-                ScheduleClubCard(onClickCard = {
-                    navController.navigate(Route.ScheduleDetail.route)
-                })
-                ScheduleClubCard(onClickCard = {
-                    navController.navigate(Route.ScheduleDetail.route)
-                })
-                ScheduleClubCard(isRandomMatching = true, onClickCard = {
-                    navController.navigate(Route.ScheduleDetail.route)
-                })
-                ScheduleClubCard(isRandomMatching = true, onClickCard = {
-                    navController.navigate(Route.ScheduleDetail.route)
-                })
-                ScheduleClubCard(isRandomMatching = true, onClickCard = {
-                    navController.navigate(Route.ScheduleDetail.route)
-                })
-                ScheduleClubCard(isRandomMatching = true, onClickCard = {
-                    navController.navigate(Route.ScheduleDetail.route)
-                })
-                Spacer(
-                    modifier = Modifier.size(15.dp),
-                )
+                if (!testMatchEvents.isEmpty()) {   //todo: 실제 데이터로 변경
+                    testMatchEvents.forEach { event ->
+                        ScheduleClubCard(
+                            isRandomMatching = event.matchType == "랜덤 매칭 요청",
+                            onClickCard = {
+                                navController.navigate(Route.ScheduleDetail.route)
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            clubName = event.clubName,
+//                        clubIcon = event.clubLogoUrl,     //TODO: 동아리 아이콘 url로 변경
+                            universityAndMajor = event.departmentName,
+                            kakaoTalkLink = event.chatUrl
+                        )
+                    }
+                }
             }
 
+            Spacer(
+                modifier = Modifier.size(15.dp),
+            )
         }
     }
+
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

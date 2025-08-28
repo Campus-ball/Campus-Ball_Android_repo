@@ -98,7 +98,6 @@ fun ScheduleCalendar(
             startTime = "13:00",
             endTime = "15:00",
         )
-
     )
 
 
@@ -122,7 +121,7 @@ fun ScheduleCalendar(
             onMonthChanged = { newMonth ->
                 currentYearMonth = newMonth
             },
-            events = testEvents     //TODO: 실제 이벤트값으로 나중에 변경
+            events = events     //TODO: 실제 이벤트값으로 나중에 변경
         )
         /*        Row {
                     Text(
