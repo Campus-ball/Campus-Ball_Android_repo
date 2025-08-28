@@ -16,7 +16,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,10 +30,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
+import com.konkuk.summerhackathon.presentation.match.component.LoadingModal
+import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 val slogans = listOf(
     "친선 매치로 더 즐겁게, 더 뜨겁게!",
@@ -42,7 +52,8 @@ val slogans = listOf(
 
 @Composable
 fun MatchScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
     val randomSlogan = remember { slogans.random() }
 
@@ -111,7 +122,9 @@ fun MatchScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 40.dp)
                         .background(colors.skyblue, shape = RoundedCornerShape(100.dp))
-                        .clickable {  }
+                        .clickable {
+                            navController.navigate(Route.MatchDetail.route)
+                        }
                 ){
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,

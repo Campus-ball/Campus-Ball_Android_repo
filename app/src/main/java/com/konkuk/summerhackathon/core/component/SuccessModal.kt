@@ -36,6 +36,7 @@ fun SuccessModal(
     modifier: Modifier = Modifier,
     value: String = "경기 신청에 성공하였습니다!",
     buttonValue: String = "홈화면으로 이동",
+    value2: String? = null,
     onClick: () -> Unit = {}
 ) {
     Box(
@@ -72,13 +73,35 @@ fun SuccessModal(
                 )
                 Spacer(modifier = Modifier.height(13.dp))
 
-                Text(
-                    text = value,
-                    style = typography.SB_16.copy(fontSize = 18.sp),
-                    color = colors.likeblack,
-                    textAlign = TextAlign.Center,
-                )
-
+                if(value2 != null){
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        Text(
+                            text = value,
+                            style = typography.SB_16.copy(fontSize = 18.sp),
+                            color = colors.likeblack,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = value2,
+                            style = typography.R_15,
+                            color = colors.likeblack,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                        )
+                    }
+                }else{
+                    Text(
+                        text = value,
+                        style = typography.SB_16.copy(fontSize = 18.sp),
+                        color = colors.likeblack,
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
             Box(
                 Modifier

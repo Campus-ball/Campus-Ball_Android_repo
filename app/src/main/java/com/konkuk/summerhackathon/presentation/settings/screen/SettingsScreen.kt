@@ -2,10 +2,8 @@ package com.konkuk.summerhackathon.presentation.settings.screen
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
+import com.konkuk.summerhackathon.core.component.DisabledField
 import com.konkuk.summerhackathon.core.component.DuplicateTextField
 import com.konkuk.summerhackathon.core.component.Gender
 import com.konkuk.summerhackathon.core.component.GenderSegmentedField
@@ -356,37 +355,6 @@ private fun InactiveForm(
         }
 
         Spacer(modifier = Modifier.height(37.dp))
-    }
-}
-
-@Composable
-private fun DisabledField(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = label,
-            style = typography.EB_12,
-            color = colors.lightgray
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-        Box(
-            modifier = Modifier
-                .height(41.dp)
-                .fillMaxWidth()
-                .background(color = colors.white, shape = RoundedCornerShape(10.dp))
-                .border(width = 1.dp, color = colors.gray, shape = RoundedCornerShape(10.dp))
-                .padding(start = 11.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Text(
-                text = value,
-                style = typography.M_14,
-                color = colors.lightgray
-            )
-        }
     }
 }
 

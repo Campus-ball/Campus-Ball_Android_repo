@@ -17,6 +17,7 @@ sealed class Route(
     data object ComponentLookUp : Route(route = "component_lookup")    // 동아리 클릭 시 일정 확인
 
     data object Match : Route(route = "match")
+    data object MatchDetail : Route(route = "match_detail")
 
     data object Proposal : Route(route = "proposal")
 
