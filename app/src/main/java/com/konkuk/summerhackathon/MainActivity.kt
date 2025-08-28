@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
                     Route.SignUp.route -> false
                     Route.ClubLookUp.route -> false
                     Route.ComponentLookUp.route -> false
+                    Route.MatchDetail.route -> false
                     else -> true
                 }
 
