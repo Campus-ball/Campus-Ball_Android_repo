@@ -13,8 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.konkuk.summerhackathon.presentation.auth.screen.LoginScreen
 import com.konkuk.summerhackathon.presentation.auth.screen.SignUpScreen
-import com.konkuk.summerhackathon.presentation.clublookup.screen.CollegeLookUpScreen
 import com.konkuk.summerhackathon.presentation.clublookup.screen.ClubLookUpScreen
+import com.konkuk.summerhackathon.presentation.clublookup.screen.CollegeLookUpScreen
 import com.konkuk.summerhackathon.presentation.clublookup.screen.ComponentLookUpScreen
 import com.konkuk.summerhackathon.presentation.match.screen.MatchDetailScreen
 import com.konkuk.summerhackathon.presentation.match.screen.MatchScreen
@@ -73,28 +73,24 @@ fun MainNavGraph(
 
         // Lookup
         composable(route = Route.CollegeLookUp.route) {
-            CollegeLookUpScreen(modifier = modifier, onUniversityClick = { collegeId ->
-//                navController.navigate("${Route.ClubLookUp.route}/$collegeId")
-                navController.navigate(Route.ClubLookUp.route)
-
+            CollegeLookUpScreen(modifier = modifier, navController = navController, onDepartmentClick = { dept ->
+                navController.navigate(Route.ClubLookUp.path(dept.departmentId))
             })
         }
 
 
-        /*        composable(
-                    route = Route.ClubLookUpWithArg.route,
-                    arguments = listOf(navArgument("collegeId") { type = NavType.IntType })
-                ) { backStackEntry ->
-                    val collegeId = backStackEntry.arguments?.getInt(Route.CollegeLookUp.route)
-
-                    if (collegeId != null) {
-                        ClubLookUpScreen(collegeId = collegeId)
-                    }
-                    ClubLookUpScreen()
-                }*/
-
-        composable(route = Route.ClubLookUp.route) {
-            ClubLookUpScreen(modifier = modifier, navController = navController)
+        composable(
+            route = Route.ClubLookUp.route,
+            arguments = listOf(
+                navArgument("departmentId") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val departmentId = backStackEntry.arguments?.getInt("departmentId") ?: 0
+            ClubLookUpScreen(
+                modifier = modifier,
+                navController = navController,
+                collegeId = departmentId   // 필요하면 넘겨서 사용
+            )
         }
 
         composable(route = Route.ComponentLookUp.route) {
