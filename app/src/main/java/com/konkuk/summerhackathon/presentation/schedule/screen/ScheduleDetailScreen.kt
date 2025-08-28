@@ -87,7 +87,7 @@ fun ScheduleDetailScreen(
             )
             ScheduleCalendar(
                 modifier = Modifier
-                    .height(348.dp)
+                    .height(348.dp),
             )
         }
 
@@ -104,7 +104,7 @@ fun ScheduleDetailScreen(
             )
             ScheduleCalendar(
                 modifier = Modifier
-                    .height(348.dp)
+                    .height(348.dp),
             )
         }
         Spacer(Modifier.height(23.dp))

@@ -14,29 +14,74 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.konkuk.summerhackathon.data.dto.response.CalendarEventDto
+import com.konkuk.summerhackathon.presentation.schedule.EventType
 import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
+import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ScheduleCalendar(modifier: Modifier = Modifier) {
+fun ScheduleCalendar(
+    modifier: Modifier = Modifier,
+    events: List<CalendarEventDto> = emptyList()
+) {
+
+    val testEvents = listOf(
+        CalendarEventDto(
+            eventId = 1,
+            eventType = EventType.ACADEMIC,
+            title = "중간고사",
+            startDate = "2025-08-14",
+            endDate = "2025-08-18",
+            startTime = "18:00",
+            endTime = "19:00",
+        ),
+        CalendarEventDto(
+            eventId = 5,
+            eventType = EventType.ACADEMIC,
+            title = "dss",
+            startDate = "2025-08-02",
+            endDate = "2025-08-04",
+            startTime = "18:00",
+            endTime = "19:00",
+        ),
+        CalendarEventDto(
+            eventId = 2,
+            eventType = EventType.MATCH,
+            title = "스터디 모임",
+            startDate = "2025-08-26",
+            endDate = "2025-08-28",
+            startTime = "10:00",
+            endTime = "12:30",
+        ),
+        CalendarEventDto(
+            eventId = 3,
+            eventType = EventType.AVAILABILITY,
+            title = "축구 경기",
+            startDate = "2025-08-22",
+            endDate = "2025-08-22",
+            startTime = "13:00",
+            endTime = "15:00",
+        )
+    )
+
+
     var currentYearMonth by remember { mutableStateOf(YearMonth.now()) }
     var selectedDateTime by remember { mutableStateOf(LocalDateTime.now()) }
 
@@ -56,8 +101,21 @@ fun ScheduleCalendar(modifier: Modifier = Modifier) {
             },
             onMonthChanged = { newMonth ->
                 currentYearMonth = newMonth
-            }
+            },
+            events = testEvents
         )
+        Row {
+            Text(
+                text = "${currentYearMonth}-${selectedDateTime.dayOfMonth}일 : ",
+                style = typography.M_18,
+                color = colors.likeblack,
+            )
+            Text(
+                text = "일정",
+                style = typography.M_18,
+                color = colors.likeblack,
+            )
+        }
     }
 }
 
@@ -67,7 +125,8 @@ fun CalendarView(
     yearMonth: YearMonth,
     selectedDateTime: LocalDateTime,
     onDateTimeSelected: (LocalDateTime) -> Unit,
-    onMonthChanged: (YearMonth) -> Unit
+    onMonthChanged: (YearMonth) -> Unit,
+    events: List<CalendarEventDto> = emptyList()
 ) {
     Column {
         CalendarHeader(
@@ -81,7 +140,8 @@ fun CalendarView(
         CalendarGrid(
             yearMonth = yearMonth,
             selectedDateTime = selectedDateTime, // 변경된 상태 전달
-            onDateTimeSelected = onDateTimeSelected //변경된 콜백 전달
+            onDateTimeSelected = onDateTimeSelected, //변경된 콜백 전달
+            events = events
         )
     }
 }
@@ -142,11 +202,14 @@ fun WeekDaysHeader() {
 fun CalendarGrid(
     yearMonth: YearMonth,
     selectedDateTime: LocalDateTime,
-    onDateTimeSelected: (LocalDateTime) -> Unit
+    onDateTimeSelected: (LocalDateTime) -> Unit,
+    events: List<CalendarEventDto>
 ) {
     val daysInMonth = yearMonth.lengthOfMonth()
     val firstOfMonth = yearMonth.atDay(1)
     val startOffset = firstOfMonth.dayOfWeek.value % 7
+
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
@@ -160,38 +223,97 @@ fun CalendarGrid(
 
             val isSelected = (date == selectedDateTime.toLocalDate())
 
-            DayCell(
-                day = day.toString(),
-                isSelected = isSelected,
-                onClick = {
-                    val newDateTime = date.atTime(selectedDateTime.toLocalTime())
-                    onDateTimeSelected(newDateTime)
-                }
-            )
+            /*
+                        val hasAcademicEvent = events.any { event ->
+                            (event.startDate == date.toString() || event.endDate == date.toString()) && event.eventType == EventType.ACADEMIC
+                        }   // events에 있는 시작 날짜가 현재 날짜면 이벤트 존재
+
+                        val foundEvent = events.find { event ->
+                            event.startDate == date.toString() || event.endDate == date.toString()
+                        }
+            */
+
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+            val hasAcademyEvent = events.any { event ->
+                val start = LocalDate.parse(event.startDate, formatter)
+                val end = LocalDate.parse(event.endDate, formatter)
+                val current = date
+
+                event.eventType == EventType.ACADEMIC &&
+                        (current.isEqual(start) || current.isEqual(end) || (current.isAfter(start) && current.isBefore(
+                            end
+                        )))
+            }
+
+            val hasMatchEvent = events.any { event ->
+                val start = LocalDate.parse(event.startDate, formatter)
+                val end = LocalDate.parse(event.endDate, formatter)
+                val current = date
+
+                event.eventType == EventType.MATCH &&
+                        (current.isEqual(start) || current.isEqual(end) || (current.isAfter(start) && current.isBefore(
+                            end
+                        )))
+            }
+
+            val hasAvailabilityEvent = events.any { event ->
+                val start = LocalDate.parse(event.startDate, formatter)
+                val end = LocalDate.parse(event.endDate, formatter)
+                val current = date
+
+                event.eventType == EventType.AVAILABILITY &&
+                        (current.isEqual(start) || current.isEqual(end) || (current.isAfter(start) && current.isBefore(
+                            end
+                        )))
+            }
+
+            var backgroundColor = Color.Transparent
+//            if (foundEvent != null) {
+//                backgroundColor = when (foundEvent.eventType) {
+//                    EventType.ACADEMIC -> Color(0xff33B4F9)
+//                    EventType.MATCH -> Color(0xFFF04D23)
+//                    EventType.AVAILABILITY -> Color(0xffF9C433)
+//                }
+//            }
+
+            if (hasAcademyEvent)
+                backgroundColor = Color(0xff33B4F9)
+            if (hasMatchEvent)
+                backgroundColor = Color(0xFFF04D23)
+            if (hasAvailabilityEvent)
+                backgroundColor = Color(0xffF9C433)
+
+
+            /*                if (isSelected) {
+                            Color(0xFFF04D23)
+                        } else Color.Transparent    */
+            val textColor = if (backgroundColor == Color.Transparent) Color(0xFF4A5660)
+            else colors.white
+
+//            val textColor=if (isSelected) colors.white else Color(0xFF4A5660)
+
+
+            Box(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .padding(4.dp)
+                    .clip(CircleShape)
+                    .background(backgroundColor)
+                    .clickable {
+                        val newDateTime = date.atTime(selectedDateTime.toLocalTime())
+                        onDateTimeSelected(newDateTime)
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = day.toString(),
+                    style = if (!isSelected) typography.SB_14 else typography.B_24.copy(fontSize = 14.sp),
+                    color = textColor,
+                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                )
+            }
         }
-    }
-}
-
-@Composable
-fun DayCell(day: String, isSelected: Boolean, onClick: () -> Unit) {
-    val backgroundColor = if (isSelected) Color(0xFFF04D23) else Color.Transparent
-    val textColor = if (isSelected) colors.white else Color(0xFF4A5660)
-
-    Box(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .padding(4.dp)
-            .clip(CircleShape)
-            .background(backgroundColor)
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = day,
-            style = if (!isSelected) typography.SB_14 else typography.B_24.copy(fontSize = 14.sp),
-            color = textColor,
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-        )
     }
 }
 

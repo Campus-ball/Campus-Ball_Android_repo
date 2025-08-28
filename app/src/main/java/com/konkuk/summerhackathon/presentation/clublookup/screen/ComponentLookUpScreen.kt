@@ -105,7 +105,7 @@ fun ComponentLookUpScreen(
             )
             ScheduleCalendar(
                 modifier = Modifier
-                    .height(348.dp)
+                    .height(348.dp),
             )
         }
 
@@ -122,7 +122,7 @@ fun ComponentLookUpScreen(
             )
             ScheduleCalendar(
                 modifier = Modifier
-                    .height(348.dp)
+                    .height(348.dp),
             )
         }
         Spacer(Modifier.height(23.dp))
