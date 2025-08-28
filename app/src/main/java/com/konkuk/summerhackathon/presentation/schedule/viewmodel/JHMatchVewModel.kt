@@ -3,8 +3,8 @@ package com.konkuk.summerhackathon.presentation.schedule.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.summerhackathon.data.dto.response.CalendarEventDto
-import com.konkuk.summerhackathon.domain.repository.CalendarRepository
+import com.konkuk.summerhackathon.data.dto.response.MatchResponse
+import com.konkuk.summerhackathon.domain.repository.MatchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,12 +16,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CalendarViewModel @Inject constructor(
-    private val calendarRepository: CalendarRepository
+class MatchViewModel @Inject constructor(
+    private val repository: MatchRepository
 ) : ViewModel() {
 
-    private val _events = MutableStateFlow<List<CalendarEventDto>>(emptyList())
-    val events: StateFlow<List<CalendarEventDto>> = _events.asStateFlow()
+    private val _events = MutableStateFlow<List<MatchResponse>>(emptyList())
+    val events: StateFlow<List<MatchResponse>> = _events.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -30,17 +30,17 @@ class CalendarViewModel @Inject constructor(
     val error: SharedFlow<String> = _error.asSharedFlow()
 
     init {
-        fetchCalendarEvents()
+        fetchMatchSuccesses()
     }
 
-    fun fetchCalendarEvents() {
+    fun fetchMatchSuccesses() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                calendarRepository.getCalendarEvents()
+                repository.getMatchSuccessEvents()
                     .onSuccess { fetchedEvents ->
                         _events.value = fetchedEvents
-                        Log.d("CalendarViewModel", "Fetched events: $fetchedEvents")
+                        Log.d("MatchViewModel", "Fetched events: $fetchedEvents")
                     }
                     .onFailure { throwable ->
                         val errorMessage = throwable.message ?: "알 수 없는 오류가 발생했습니다."

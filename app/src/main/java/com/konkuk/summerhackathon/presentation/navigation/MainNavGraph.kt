@@ -108,7 +108,7 @@ fun MainNavGraph(
         }
 
         composable(route = Route.Proposal.route) {
-            ProposalScreen(modifier = modifier)
+            ProposalScreen(modifier = modifier, navController = navController)
         }
 
         composable(route = Route.Settings.route) {

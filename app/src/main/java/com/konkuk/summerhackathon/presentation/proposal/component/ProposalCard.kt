@@ -2,6 +2,7 @@ package com.konkuk.summerhackathon.presentation.proposal.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,7 @@ fun ProposalCard(
     onAccept: () -> Unit = {},
     onDecline: () -> Unit = {},
     isRandomMatching: Boolean = false,
+    onClickCard: () -> Unit = {}
 ) {
     val noticeColor =
         if (isRandomMatching) defaultCampusBallColors.crimson else defaultCampusBallColors.mediumblue
@@ -56,10 +58,14 @@ fun ProposalCard(
                     .fillMaxWidth()
                     .padding(end = 5.dp)
                     .heightIn(min = 110.dp)
+                    .clip(RoundedCornerShape(size = 25.dp))
                     .background(
                         color = Color(0xFFFDFDFD),
                         shape = RoundedCornerShape(size = 25.dp)
                     )
+                    .clickable {
+                        onClickCard()
+                    }
             ) {
                 Row(
                     modifier = Modifier
