@@ -41,6 +41,7 @@ import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 fun ClubLookUpScreen(
     modifier: Modifier = Modifier,
     collegeId: Int,
+    department: String,
     navController: NavHostController,
     viewModel: ClubLookUpViewModel = hiltViewModel()
 ) {
@@ -89,25 +90,25 @@ fun ClubLookUpScreen(
                 Spacer(Modifier.height(36.dp))
 
 
-/*                Column(
-                    Modifier
-                        .padding(horizontal = 24.dp)
-                        .verticalScroll(scrollState),
-                    verticalArrangement = Arrangement.spacedBy(15.dp),
-                ) {
-                    ClubLookUpCard(onClick = {
-                        navController.navigate(Route.ComponentLookUp.route)
-                    })
-                    ClubLookUpCard()
-                    ClubLookUpCard()
-                    ClubLookUpCard()
-                    ClubLookUpCard()
-                    ClubLookUpCard()
-                    ClubLookUpCard()
-                    Spacer(
-                        modifier = Modifier.size(15.dp),
-                    )
-                }*/
+                /*                Column(
+                                    Modifier
+                                        .padding(horizontal = 24.dp)
+                                        .verticalScroll(scrollState),
+                                    verticalArrangement = Arrangement.spacedBy(15.dp),
+                                ) {
+                                    ClubLookUpCard(onClick = {
+                                        navController.navigate(Route.ComponentLookUp.route)
+                                    })
+                                    ClubLookUpCard()
+                                    ClubLookUpCard()
+                                    ClubLookUpCard()
+                                    ClubLookUpCard()
+                                    ClubLookUpCard()
+                                    ClubLookUpCard()
+                                    Spacer(
+                                        modifier = Modifier.size(15.dp),
+                                    )
+                                }*/
 
                 LazyColumn(
                     Modifier
@@ -119,6 +120,7 @@ fun ClubLookUpScreen(
                         if (club != null) {
                             ClubLookUpCard(
                                 clubName = club.clubName,
+                                collegeAndMajor = department,
                                 onClick = {
                                     navController.navigate(Route.ComponentLookUp.route + "/${club.clubId}")
                                 }

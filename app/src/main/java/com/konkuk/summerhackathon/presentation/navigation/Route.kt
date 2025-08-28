@@ -12,9 +12,10 @@ sealed class Route(
     data object ScheduleAvailable : Route(route = "schedule_available")
 
     data object CollegeLookUp : Route(route = "college_lookup")
-    data object ClubLookUp : Route("club_lookup/{departmentId}") {
-        fun path(departmentId: Int) = "club_lookup/$departmentId"
+    data object ClubLookUp : Route("club_lookup/{department}/{departmentId}") {
+        fun path(departmentId: Int, department: String) = "club_lookup/$department/$departmentId"
     }
+
     data object ComponentLookUp : Route(route = "component_lookup")    // 동아리 클릭 시 일정 확인
 
     data object Match : Route(route = "match")
