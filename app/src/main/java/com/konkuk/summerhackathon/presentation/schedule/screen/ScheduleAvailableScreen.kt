@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,13 +32,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
+import com.konkuk.summerhackathon.data.dto.request.AvailabilityRequest
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.presentation.schedule.component.DateInputField
 import com.konkuk.summerhackathon.presentation.schedule.component.TimeInputField
+import com.konkuk.summerhackathon.presentation.schedule.viewmodel.AvailabilityViewModel
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 import java.time.LocalTime
@@ -49,8 +53,15 @@ import java.util.Locale
 // 경기 가용 시간 등록 화면
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ScheduleAvailableScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun ScheduleAvailableScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    viewModel: AvailabilityViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
+    val viewModel: AvailabilityViewModel = hiltViewModel()
+    val status by viewModel.statusCode.collectAsState()
+
 
     var date by remember { mutableStateOf("") }
     val cal = Calendar.getInstance()
@@ -61,6 +72,13 @@ fun ScheduleAvailableScreen(modifier: Modifier = Modifier, navController: NavHos
     LaunchedEffect(start, end) {
         if (!end.isBlank() && !start.isBlank()) {
             isEndBeforeStart = !isStartBeforeEnd(start, end)
+        }
+    }
+
+    LaunchedEffect(status) {
+        when (status) {
+            200 -> navController.navigate(Route.Schedule.route)
+            -1 -> Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -129,7 +147,6 @@ fun ScheduleAvailableScreen(modifier: Modifier = Modifier, navController: NavHos
                 style = defaultCampusBallTypography.L_10.copy(fontSize = 12.sp),
             )
 
-
         Log.d("날짜", "$date")
         Log.d("시작시간", "$start")
         Log.d("종료시간", "$end")
@@ -152,8 +169,21 @@ fun ScheduleAvailableScreen(modifier: Modifier = Modifier, navController: NavHos
                 .clickable {
                     if (!isEndBeforeStart && !date.isBlank() && !start.isBlank() && !end.isBlank()) {
                         // TODO: 등록 로직 구현
+                        val formatter = DateTimeFormatter.ofPattern("a h:mm", Locale.ENGLISH)
 
-                        navController.navigate(Route.Schedule.route)
+                        val formattedDate = date.replace(".", "-")
+                        val formattedStart = LocalTime.parse(start, formatter).toString()
+                        val formattedEnd = LocalTime.parse(end, formatter).toString()
+                        Log.d("포맷된 시간", "$formattedDate")
+                        Log.d("포맷된 시작 시간", "$formattedStart")
+                        Log.d("포맷된 끝나는 시간", "$formattedEnd")
+
+                        viewModel.registerAvailability(
+                            AvailabilityRequest("2025-08-25", "15:00", "17:00", false)
+                        )
+
+                        // TODO: api 연결 후 확인해봐야 함
+//                        navController.navigate(Route.Schedule.route)
                     } else {
                         Toast.makeText(
                             context,
