@@ -3,6 +3,7 @@ package com.konkuk.summerhackathon.di
 import com.konkuk.summerhackathon.data.repositoryimpl.AuthRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.AvailabilityRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.CalendarRepositoryImpl
+import com.konkuk.summerhackathon.data.repositoryimpl.ClubRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.CollegeRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.DepartmentRepositoryImpl
 import com.konkuk.summerhackathon.data.repositoryimpl.MatchRepositoryImpl
@@ -12,6 +13,7 @@ import com.konkuk.summerhackathon.data.repositoryimpl.UserRepositoryImpl
 import com.konkuk.summerhackathon.domain.repository.AuthRepository
 import com.konkuk.summerhackathon.domain.repository.AvailabilityRepository
 import com.konkuk.summerhackathon.domain.repository.CalendarRepository
+import com.konkuk.summerhackathon.domain.repository.ClubRepository
 import com.konkuk.summerhackathon.domain.repository.CollegeRepository
 import com.konkuk.summerhackathon.domain.repository.DepartmentRepository
 import com.konkuk.summerhackathon.domain.repository.MatchRepository
@@ -30,6 +32,11 @@ object RepositoryModule {
     //    @Binds
 //    @Singleton
 //    abstract fun bindsHomeRepository(homeRepositoryImpl: HomeRepositoryImpl): HomeRepository
+
+    @Provides
+    @Singleton
+    fun provideClubRepository(impl: ClubRepositoryImpl): ClubRepository = impl
+
     @Provides
     @Singleton
     fun provideProposalDetailRepository(impl: ProposalDetailRepositoryImpl): ProposalDetailRepository =
@@ -65,6 +72,7 @@ object RepositoryModule {
     @Singleton
     fun provideUserRepository(impl: UserRepositoryImpl): UserRepository = impl
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideMatchingRepository(impl: MatchingRepositoryImpl): MatchingRepository = impl
 }
