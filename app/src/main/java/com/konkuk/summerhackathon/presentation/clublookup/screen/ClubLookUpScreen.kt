@@ -20,14 +20,22 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.presentation.clublookup.component.ClubLookUpCard
+import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 
 // 동아리 선택 화면
 @Composable
-fun ClubLookUpScreen(modifier: Modifier = Modifier, collegeId: Int = 0) {
+fun ClubLookUpScreen(
+    modifier: Modifier = Modifier,
+    collegeId: Int = 0,
+    navController: NavHostController
+) {
     val scrollState = rememberScrollState()
     Box(
         modifier = modifier
@@ -64,7 +72,9 @@ fun ClubLookUpScreen(modifier: Modifier = Modifier, collegeId: Int = 0) {
                     .verticalScroll(scrollState),
                 verticalArrangement = Arrangement.spacedBy(15.dp),
             ) {
-                ClubLookUpCard()
+                ClubLookUpCard(onClick = {
+                    navController.navigate(Route.ComponentLookUp.route)
+                })
                 ClubLookUpCard()
                 ClubLookUpCard()
                 ClubLookUpCard()
@@ -75,14 +85,13 @@ fun ClubLookUpScreen(modifier: Modifier = Modifier, collegeId: Int = 0) {
                     modifier = Modifier.size(15.dp),
                 )
             }
-
         }
     }
-
 }
 
 @Preview
 @Composable
 private fun LookUpClubScreenPreview() {
-    ClubLookUpScreen()
+    val navController = rememberNavController()
+    ClubLookUpScreen(navController = navController)
 }

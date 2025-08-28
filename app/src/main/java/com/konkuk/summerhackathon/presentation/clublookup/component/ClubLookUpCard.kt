@@ -2,6 +2,7 @@ package com.konkuk.summerhackathon.presentation.clublookup.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ fun ClubLookUpCard(
     clubName: String = "동아리 이름",
     clubIcon: Int = R.drawable.ic_launcher_background,
     collegeAndMajor: String = "OO대학교 OOO학과",
+    onClick: () -> Unit = {}
 ) {
 
     Box(modifier = modifier) {
@@ -46,10 +48,12 @@ fun ClubLookUpCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 96.dp)
+                    .clip(RoundedCornerShape(size = 25.dp))
                     .background(
                         color = Color(0xFFFDFDFD),
                         shape = RoundedCornerShape(size = 25.dp)
                     )
+                    .clickable { onClick() }
             ) {
                 Row(
                     modifier = Modifier

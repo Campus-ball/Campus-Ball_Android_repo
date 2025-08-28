@@ -1,9 +1,11 @@
-package com.konkuk.summerhackathon.presentation.schedule.screen
+package com.konkuk.summerhackathon.presentation.clublookup.screen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,33 +16,47 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.core.component.SuccessModal
 import com.konkuk.summerhackathon.presentation.clublookup.component.ClubLookUpCard
+import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalendar
-import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleClubCard
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
+import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
+import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ScheduleDetailScreen(
+fun ComponentLookUpScreen(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
 ) {
     val screenScrollState = rememberScrollState()
+    var isMatchButtonClicked by remember { mutableStateOf(false) }
 
 
     Box(
@@ -75,7 +91,6 @@ fun ScheduleDetailScreen(
         )
         Spacer(Modifier.height(19.dp))
         ClubLookUpCard(modifier = Modifier.padding(horizontal = 26.dp))
-
         Spacer(Modifier.height(19.dp))
 
         Column(
@@ -134,6 +149,7 @@ fun ScheduleDetailScreen(
 
         Spacer(Modifier.height(12.dp))
 
+        // 동아리 인원수
         Row(
             Modifier
                 .fillMaxWidth()
@@ -171,14 +187,52 @@ fun ScheduleDetailScreen(
                 )
             }
         }
-        Spacer(Modifier.height(41.dp))
 
+        Spacer(Modifier.height(20.dp))
+
+        // 친선 경기 신청 버튼
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 30.dp)
+                .height(62.dp)
+                .background(color = colors.skyblue, shape = RoundedCornerShape(size = 100.dp))
+                .clip(RoundedCornerShape(size = 100.dp))
+                .clickable {
+                    isMatchButtonClicked = true
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                modifier = Modifier.align(Alignment.Center),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "친선 경기 신청",
+                    color = defaultCampusBallColors.white,
+                    style = defaultCampusBallTypography.B_17.copy(fontSize = 18.sp),
+                )
+                Spacer(Modifier.width(10.dp))
+                Image(
+                    modifier = Modifier.size(16.dp),
+                    painter = painterResource(id = R.drawable.ic_send),
+                    contentDescription = "",
+                )
+            }
+        }
+        Spacer(Modifier.height(91.dp))
+    }
+    if (isMatchButtonClicked) {
+        SuccessModal(value = "친선 경기 신청에 성공하였습니다!", buttonValue = "홈화면으로 이동", onClick = {
+            navController.navigate(Route.Match.route)
+        })
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-private fun ScheduleDetailScreenPreview() {
-    ScheduleDetailScreen()
+private fun ComponentLookUpScreenPreview() {
+    val navController = rememberNavController()
+    ComponentLookUpScreen(navController = navController)
 }
