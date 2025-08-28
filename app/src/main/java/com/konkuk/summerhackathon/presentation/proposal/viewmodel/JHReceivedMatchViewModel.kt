@@ -3,6 +3,7 @@ package com.konkuk.summerhackathon.presentation.proposal.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.summerhackathon.data.dto.request.MatchRequest
 import com.konkuk.summerhackathon.data.dto.response.ReceivedMatchResponse
 import com.konkuk.summerhackathon.domain.repository.MatchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,9 @@ class ReceivedMatchViewModel @Inject constructor(
     private val _error = MutableSharedFlow<String>()
     val error: SharedFlow<String> = _error.asSharedFlow()
 
+    private val _actionResult = MutableSharedFlow<Boolean>()
+    val actionResult: SharedFlow<Boolean> = _actionResult.asSharedFlow()
+
     init {
         fetchMatchProposals()
     }
@@ -52,4 +56,49 @@ class ReceivedMatchViewModel @Inject constructor(
             }
         }
     }
+
+
+    fun acceptMatch(request: MatchRequest) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val code = repository.acceptMatch(request)
+                if (code == 200) {
+                    _actionResult.emit(true)
+                    fetchMatchProposals() // 새로고침
+                } else {
+                    _error.emit("매치 수락 실패 (code: $code)")
+                    _actionResult.emit(false)
+                }
+            } catch (e: Exception) {
+                _error.emit("매치 수락 에러: ${e.message}")
+                _actionResult.emit(false)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun rejectMatch(request: MatchRequest) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val code = repository.rejectMatch(request)
+                if (code == 200) {
+                    _actionResult.emit(true)
+                    fetchMatchProposals() // 새로고침
+                } else {
+                    _error.emit("매치 거절 실패 (code: $code)")
+                    _actionResult.emit(false)
+                }
+            } catch (e: Exception) {
+                _error.emit("매치 거절 에러: ${e.message}")
+                _actionResult.emit(false)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+
 }

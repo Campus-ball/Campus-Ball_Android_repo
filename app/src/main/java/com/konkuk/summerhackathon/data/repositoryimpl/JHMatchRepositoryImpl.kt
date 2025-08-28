@@ -1,5 +1,7 @@
 package com.konkuk.summerhackathon.data.repositoryimpl
 
+import android.util.Log
+import com.konkuk.summerhackathon.data.dto.request.MatchRequest
 import com.konkuk.summerhackathon.data.dto.response.MatchResponse
 import com.konkuk.summerhackathon.data.dto.response.ReceivedMatchResponse
 import com.konkuk.summerhackathon.data.service.MatchApiService
@@ -23,6 +25,26 @@ class MatchRepositoryImpl @Inject constructor(
         return runCatching {
             val response = matchApiService.getReceivedMatchSuccessEvents()
             response.data.items
+        }
+    }
+
+    override suspend fun acceptMatch(request: MatchRequest): Int {
+        return try {
+            val response = matchApiService.acceptMatch(request)
+            response.code()
+        } catch (e: Exception) {
+            Log.e("MatchRepositoryImpl", "Error accepting match", e)
+            -1
+        }
+    }
+
+    override suspend fun rejectMatch(request: MatchRequest): Int {
+        return try {
+            val response = matchApiService.rejectMatch(request)
+            response.code()
+        } catch (e: Exception) {
+            Log.e("MatchRepositoryImpl", "Error rejecting match", e)
+            -1
         }
     }
 }
