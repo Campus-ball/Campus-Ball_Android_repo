@@ -1,7 +1,9 @@
 package com.konkuk.summerhackathon.data.service
 
+import com.konkuk.summerhackathon.data.dto.request.ClubLeaderSignUpRequest
 import com.konkuk.summerhackathon.data.dto.request.LoginRequest
 import com.konkuk.summerhackathon.data.dto.request.RefreshRequest
+import com.konkuk.summerhackathon.data.dto.response.ClubLeaderSignUpResponse
 import com.konkuk.summerhackathon.data.dto.response.LoginResponse
 import com.konkuk.summerhackathon.data.dto.response.RefreshResponse
 import retrofit2.http.Body
@@ -13,4 +15,9 @@ interface AuthApi {
 
     @POST("/auth/refresh")
     suspend fun refresh(@Body body: RefreshRequest): RefreshResponse
+
+    @POST("auth/signup/club-leader")
+    suspend fun signUpClubLeader(
+        @Body body: ClubLeaderSignUpRequest
+    ): ClubLeaderSignUpResponse
 }

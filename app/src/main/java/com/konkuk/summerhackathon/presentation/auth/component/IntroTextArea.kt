@@ -24,7 +24,7 @@ import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
 @Composable
 fun IntroTextArea(
-    value: String,
+    value: String?,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     label: String = "소개 글",
@@ -35,12 +35,21 @@ fun IntroTextArea(
     shape: RoundedCornerShape = RoundedCornerShape(12.dp)
 ) {
     val scroll = rememberScrollState()
-    val border = BorderStroke(1.5.dp, colors.indigo)
+    val isError = value == null
+    val border = BorderStroke(1.5.dp, if (isError) colors.red else colors.indigo)
 
     Column(
         modifier = modifier
     ) {
-        Text(label, style = typography.EB_12, color = colors.black)
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(label, style = typography.EB_12, color = colors.black)
+            if (isError) Text("필수 입력입니다", style = typography.L_10, color = colors.red)
+        }
+
         Spacer(Modifier.height(6.dp))
 
         Box(
@@ -52,7 +61,7 @@ fun IntroTextArea(
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             BasicTextField(
-                value = value.take(maxLength),
+                value = value.orEmpty().take(maxLength),
                 onValueChange = { onValueChange(it.take(maxLength)) },
                 textStyle = typography.M_14.copy(color = colors.black),
                 singleLine = false,
@@ -66,7 +75,7 @@ fun IntroTextArea(
                     .heightIn(min = minHeight, max = maxHeight)
                     .verticalScroll(scroll),
                 decorationBox = { inner ->
-                    if (value.isEmpty()) {
+                    if (value.isNullOrEmpty()) {
                         Text(placeholder, style = typography.M_14, color = colors.gray)
                     }
                     inner()
@@ -77,7 +86,7 @@ fun IntroTextArea(
         Spacer(Modifier.height(4.dp))
         Box(Modifier.fillMaxWidth()) {
             Text(
-                text = "${value.length}/$maxLength",
+                text = "${value?.length ?: 0}/$maxLength",
                 style = typography.R_8,
                 color = colors.gray,
                 modifier = Modifier.align(Alignment.CenterEnd)

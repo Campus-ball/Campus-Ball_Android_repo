@@ -26,6 +26,8 @@ import com.konkuk.summerhackathon.core.component.Gender
 import com.konkuk.summerhackathon.core.component.GenderSegmentedField
 import com.konkuk.summerhackathon.core.component.NameTextField
 import com.konkuk.summerhackathon.core.component.RequiredTextField
+import com.konkuk.summerhackathon.data.dto.response.CollegeListResponse
+import com.konkuk.summerhackathon.data.dto.response.DepartmentListResponse
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
@@ -60,17 +62,11 @@ object SignUpValidators {
 fun LeaderForm(
     modifier: Modifier = Modifier,
     onSubmit: (LeaderSignUpData) -> Unit = {},
-    navController: NavHostController
+    navController: NavHostController,
+    colleges: List<CollegeListResponse.College> = emptyList(),
+    departments: List<DepartmentListResponse.Department> = emptyList(),
+    onCollegeSelected: (Int) -> Unit = {},
 ) {
-    val universities = listOf("건국대학교", "서울대학교", "연세대학교", "고려대학교", "성균관대학교")
-    val departmentsMap = mapOf(
-        "건국대학교" to listOf("컴퓨터공학부", "전자공학부", "경영학과", "수학과"),
-        "서울대학교" to listOf("컴퓨터공학부", "전기정보공학부", "경영학과"),
-        "연세대학교" to listOf("컴퓨터과학과", "전자공학과", "경영학과"),
-        "고려대학교" to listOf("컴퓨터학과", "전기전자공학부", "경영학과"),
-        "성균관대학교" to listOf("소프트웨어학과", "전자전기공학과", "경영학과"),
-    )
-
     var name by rememberSaveable { mutableStateOf("") }
     val isNameValid = remember(name) { SignUpValidators.isValidName(name) }
 
@@ -90,24 +86,36 @@ fun LeaderForm(
 
     var clubName by rememberSaveable { mutableStateOf<String?>(null) }
 
-    var clubIntro by rememberSaveable { mutableStateOf("") }
+    var clubIntro by rememberSaveable { mutableStateOf<String?>(null) }
 
-    var university by rememberSaveable { mutableStateOf(universities.first()) }
-    var department by rememberSaveable { mutableStateOf(departmentsMap[universities.first()]!!.first()) }
+    var selectedCollegeId by rememberSaveable { mutableStateOf<Int?>(null) }
+    val selectedCollege = colleges.firstOrNull { it.collegeId == selectedCollegeId }
+
+    var department by rememberSaveable { mutableStateOf("") }
 
     var clubLogoUriStr by rememberSaveable { mutableStateOf<String?>(null) }
 
     var kakaoOpenChatLink by rememberSaveable { mutableStateOf<String?>(null) }
 
-    val deptOptions = departmentsMap[university].orEmpty()
-    LaunchedEffect(university) {
-        if (department !in deptOptions) {
-            department = deptOptions.firstOrNull() ?: department
+    LaunchedEffect(colleges) {
+        if (selectedCollegeId == null && colleges.isNotEmpty()) {
+            selectedCollegeId = colleges.first().collegeId
+            onCollegeSelected(selectedCollegeId!!)
+        }
+    }
+
+    LaunchedEffect(selectedCollegeId) {
+        department = ""
+    }
+
+    LaunchedEffect(departments) {
+        if (department.isBlank() && departments.isNotEmpty()) {
+            department = departments.first().departmentName
         }
     }
 
     val isFormValid =
-        isNameValid && nicknameConfirmed != null && userIdConfirmed != null && isPwValid && clubName != null && contact != null && kakaoOpenChatLink != null
+        isNameValid && nicknameConfirmed != null && userIdConfirmed != null && isPwValid && clubName != null && contact != null && kakaoOpenChatLink != null && clubIntro != null
 
     val blockers = listOfNotNull(
         if (!isNameValid) "이름" else null,
@@ -116,6 +124,7 @@ fun LeaderForm(
         if (!isPwValid) "비밀번호 일치" else null,
         if (clubName == null) "동아리명" else null,
         if (contact == null) "연락처" else null,
+        if (clubIntro == null) "동아리소개" else null,
         if (kakaoOpenChatLink == null) "오픈채팅 링크" else null
     )
 
@@ -131,7 +140,7 @@ fun LeaderForm(
         ) {
             FormActionButton(
                 text = "확인",
-                enabled = isFormValid,
+                enabled = isFormValid && selectedCollegeId != null,
                 onClick = {
                     val data = LeaderSignUpData(
                         name = name,
@@ -141,20 +150,14 @@ fun LeaderForm(
                         password = password,
                         contact = contact!!,
                         clubName = clubName!!,
-                        clubIntro = clubIntro,
-                        university = university,
+                        clubIntro = clubIntro!!,
+                        university = selectedCollege?.collegeName ?: "",
                         department = department,
                         clubLogoUri = clubLogoUriStr,
                         kakaoOpenChatLink = kakaoOpenChatLink!!
                     )
                     onSubmit(data)
-                    navController.navigate(Route.Login.route) {
-                        popUpTo(0) { inclusive = true }
-                        launchSingleTop = true
-                        restoreState = false
-                    }
                 },
-                modifier = Modifier,
                 missingReasons = blockers
             )
         }
@@ -256,9 +259,13 @@ fun LeaderForm(
             Spacer(modifier = Modifier.height(6.dp))
             SearchDropdownChipField(
                 label = "소속 대학",
-                selected = university,
-                options = universities,
-                onSelected = { university = it }
+                selected = selectedCollege?.collegeName ?: "",
+                options = colleges.map { it.collegeName },
+                onSelected = { name ->
+                    val id = colleges.find { it.collegeName == name }?.collegeId
+                    selectedCollegeId = id
+                    if (id != null) onCollegeSelected(id)
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -266,7 +273,7 @@ fun LeaderForm(
                 label = "소속 학과",
                 placeholder = "학과 검색…",
                 selected = department,
-                options = deptOptions,
+                options = departments.map { it.departmentName },
                 onSelected = { department = it }
             )
 
