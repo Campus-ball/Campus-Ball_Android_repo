@@ -64,6 +64,8 @@ class MainActivity : ComponentActivity() {
                 val showBottomBar = when (currentRoute) {
                     Route.Login.route -> false
                     Route.SignUp.route -> false
+                    Route.ClubLookUp.route -> false
+                    Route.ComponentLookUp.route -> false
                     else -> true
                 }
 
@@ -71,6 +73,7 @@ class MainActivity : ComponentActivity() {
                     Route.ScheduleDetail.route,
                     Route.ScheduleAvailable.route,
                     Route.ClubLookUp.route,
+                    Route.ComponentLookUp.route,
                 )
 
 
