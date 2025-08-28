@@ -20,6 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.konkuk.summerhackathon.core.component.DuplicateTextField
+import com.konkuk.summerhackathon.core.component.FormActionButton
+import com.konkuk.summerhackathon.core.component.Gender
+import com.konkuk.summerhackathon.core.component.GenderSegmentedField
+import com.konkuk.summerhackathon.core.component.NameTextField
+import com.konkuk.summerhackathon.core.component.RequiredTextField
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography

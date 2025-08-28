@@ -3,6 +3,7 @@ package com.konkuk.summerhackathon.presentation.navigation
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -18,6 +19,7 @@ import com.konkuk.summerhackathon.presentation.proposal.screen.ProposalScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleAvailableScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleDetailScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleScreen
+import com.konkuk.summerhackathon.presentation.settings.screen.MyAccountUi
 import com.konkuk.summerhackathon.presentation.settings.screen.SettingsScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -98,8 +100,23 @@ fun MainNavGraph(
             ProposalScreen(modifier = modifier)
         }
 
-        composable(route = Route.Settings.route) {
-            SettingsScreen(modifier = modifier)
+        composable(route = Route.Settings.route){
+            val dummyUi = remember {
+                MyAccountUi(
+                    club = "A 동아리",
+                    name = "홍길동",
+                    nickname = "배고픈 하마",
+                    gender = "남자",
+                    contact = "010-4171-2876",
+                    kakaoOpenChat = "http://12341234"
+                )
+            }
+
+            SettingsScreen(
+                ui = dummyUi,
+                modifier = modifier,
+                navController = navController
+            )
         }
     }
 }

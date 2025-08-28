@@ -1,6 +1,7 @@
 package com.konkuk.summerhackathon.presentation.auth.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,7 +56,7 @@ fun PasswordFields(
             Spacer(Modifier.height(5.dp))
             val border1 = BorderStroke(1.5.dp, colors.indigo)
             Box(
-                Modifier.fillMaxWidth().defaultMinSize(minHeight = minHeight)
+                Modifier.fillMaxWidth().defaultMinSize(minHeight = minHeight).background(colors.white, shape)
                     .border(border1, shape).clip(shape).padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 BasicTextField(
@@ -85,7 +86,7 @@ fun PasswordFields(
             Spacer(Modifier.height(5.dp))
             val border2 = BorderStroke(1.5.dp, if (isMismatch) colors.red else colors.indigo)
             Box(
-                Modifier.fillMaxWidth().defaultMinSize(minHeight = minHeight)
+                Modifier.fillMaxWidth().defaultMinSize(minHeight = minHeight).background(colors.white, shape)
                     .border(border2, shape).clip(shape).padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 BasicTextField(

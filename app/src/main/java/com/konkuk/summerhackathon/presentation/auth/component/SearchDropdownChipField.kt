@@ -62,7 +62,9 @@ fun SearchDropdownChipField(
         else options.filter { it.contains(query.trim(), ignoreCase = true) }
     }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         Text(text = label, style = typography.EB_12, color = colors.black)
 
         Spacer(Modifier.height(5.dp))
@@ -71,6 +73,7 @@ fun SearchDropdownChipField(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = minHeight)
+                .background(colors.white, shape)
                 .border(stroke, shape)
                 .clip(shape)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
