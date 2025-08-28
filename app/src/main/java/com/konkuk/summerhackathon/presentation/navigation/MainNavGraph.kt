@@ -81,7 +81,8 @@ fun MainNavGraph(
 
             SettingsScreen(
                 ui = dummyUi,
-                modifier = modifier
+                modifier = modifier,
+                navController = navController
             )
         }
     }

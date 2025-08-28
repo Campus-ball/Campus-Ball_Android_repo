@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.core.component.DuplicateTextField
 import com.konkuk.summerhackathon.core.component.Gender
@@ -38,6 +39,8 @@ import com.konkuk.summerhackathon.core.component.NameTextField
 import com.konkuk.summerhackathon.core.component.RequiredTextField
 import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.auth.component.SignUpValidators
+import com.konkuk.summerhackathon.presentation.navigation.Route
+import com.konkuk.summerhackathon.presentation.settings.component.ConfirmModalBox
 import com.konkuk.summerhackathon.presentation.settings.component.OutlinePillButton
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
@@ -54,7 +57,8 @@ data class MyAccountUi(
 @Composable
 fun SettingsScreen(
     ui: MyAccountUi,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
     var saved by remember { mutableStateOf(ui) }
 
@@ -63,6 +67,9 @@ fun SettingsScreen(
     var draft by remember(saved) { mutableStateOf(saved) }
 
     var showDone by remember { mutableStateOf(false) }
+
+    var showLogout by remember { mutableStateOf(false) }
+    var showOut by remember { mutableStateOf(false) }
 
     LaunchedEffect(showDone) {
         if (showDone) {
@@ -140,7 +147,11 @@ fun SettingsScreen(
                             onValidityChange = { isFormValid = it }
                         )
                     } else {
-                        InactiveForm(ui = saved)
+                        InactiveForm(
+                            ui = saved,
+                            onShowChange = { showLogout = it },
+                            onShowOutChange = { showOut = it }
+                        )
                     }
                 }
             }
@@ -154,6 +165,24 @@ fun SettingsScreen(
                 .zIndex(1f)
         )
     }
+    ConfirmModalBox(
+        visible = showLogout,
+        message = "로그아웃 하시겠습니까?",
+        leftText = "취소",
+        rightText = "확인",
+        onLeft  = { showLogout = false },
+        onRight = { navController.navigate(Route.Login.route) },
+        onDismiss = { showLogout = false }
+    )
+    ConfirmModalBox(
+        visible = showOut,
+        message = "정말로 탈퇴 하시겠습니까?",
+        leftText = "취소",
+        rightText = "확인",
+        onLeft  = { showOut = false },
+        onRight = { navController.navigate(Route.Login.route) },
+        onDismiss = { showOut = false }
+    )
 }
 
 @Composable
@@ -260,7 +289,11 @@ private fun ActiveForm(
 }
 
 @Composable
-private fun InactiveForm(ui: MyAccountUi) {
+private fun InactiveForm(
+    ui: MyAccountUi,
+    onShowChange: (Boolean) -> Unit,
+    onShowOutChange: (Boolean) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -288,7 +321,7 @@ private fun InactiveForm(ui: MyAccountUi) {
                 style = typography.M_14,
                 color = colors.lightgray,
                 modifier = Modifier
-                    .noRippleClickable {  }
+                    .noRippleClickable { onShowChange(true) }
             )
         }
 
@@ -302,7 +335,7 @@ private fun InactiveForm(ui: MyAccountUi) {
                 style = typography.M_14,
                 color = colors.lightgray,
                 modifier = Modifier
-                    .noRippleClickable {  }
+                    .noRippleClickable { onShowOutChange(true) }
             )
         }
 
