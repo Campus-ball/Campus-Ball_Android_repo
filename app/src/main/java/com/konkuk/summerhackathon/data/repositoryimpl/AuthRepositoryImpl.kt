@@ -16,8 +16,13 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(userId: String, password: String): Result<Unit> =
         runCatching {
             val res = api.login(LoginRequest(userId, password))
-            val t = res.data
-            tokenManager.saveTokens(t.accessToken, t.refreshToken, t.tokenType)
+
+            if (res.status == 200 && res.data.accessToken.isNotBlank()) {
+                val t = res.data
+                tokenManager.saveTokens(t.accessToken, t.refreshToken, t.tokenType)
+            } else {
+                throw Exception(res.message.ifBlank { "잘못된 아이디 또는 비밀번호" })
+            }
         }
 
     override suspend fun logout() {

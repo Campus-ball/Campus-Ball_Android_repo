@@ -62,6 +62,7 @@ class AuthViewModel @Inject constructor(
                 onSuccess()
             } else {
                 loginError = "잘못된 형식의 아이디 또는 비밀번호 입니다"
+                id = ""
                 pw = ""
                 onFailure(loginError!!)
             }

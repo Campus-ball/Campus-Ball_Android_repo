@@ -2,8 +2,8 @@ package com.konkuk.summerhackathon.presentation.match.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
@@ -40,25 +42,91 @@ import com.konkuk.summerhackathon.core.component.DisabledField
 import com.konkuk.summerhackathon.core.component.SuccessModal
 import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.match.component.LoadingModal
+import com.konkuk.summerhackathon.presentation.match.viewmodel.MatchViewModel
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
-import kotlinx.coroutines.delay
+import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MatchDetailScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    vm: MatchViewModel = androidx.hilt.navigation.compose.hiltViewModel()
 ) {
-    var isMatchButtonClicked by remember { mutableStateOf(false) }
+    val ui by vm.ui.collectAsState()
+    val isLoading by vm.isLoading.collectAsState()
+    val error by vm.error.collectAsState()
 
-    var showLoading by remember { mutableStateOf(false) }
+    var isMatchButtonClicked by remember { mutableStateOf(false) }
     var otherTeamClicked by remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) { vm.fetchRandomMatch() }
+
+    LaunchedEffect(otherTeamClicked) {
+        if (otherTeamClicked) {
+            vm.fetchRandomMatch()
+            otherTeamClicked = false
+        }
+    }
+
     LaunchedEffect(Unit) {
-        showLoading = true
-        delay(2000)
-        showLoading = false
+        vm.events.collectLatest { ev ->
+            when (ev) {
+                is MatchViewModel.Event.RequestSuccess -> {
+                    isMatchButtonClicked = true
+                }
+                is MatchViewModel.Event.Error -> {
+                    // 에러 모달/스낵바 표시
+                }
+                is MatchViewModel.Event.MatchFetched -> Unit
+            }
+        }
+    }
+
+    if (isLoading) LoadingModal()
+
+    if (error != null) {
+        Column(
+            modifier = modifier.fillMaxSize().zIndex(2f)
+        ){
+            Box(
+                modifier = Modifier
+                    .padding(top = 19.dp, start = 21.dp)
+            ){
+                Image(
+                    modifier = Modifier
+                        .padding(start = 21.dp, top = 101.dp)
+                        .size(25.dp)
+                        .align(Alignment.TopStart)
+                        .noRippleClickable { navController.popBackStack() },
+                    painter = painterResource(id = R.drawable.ic_back_arrow),
+                    contentDescription = "",
+                )
+            }
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colors.white)
+                .zIndex(1f)
+                .padding(horizontal = 20.dp)
+        ){
+            Image(
+                painter = painterResource(R.drawable.img_fail),
+                contentDescription = "error image",
+                modifier = Modifier.size(120.dp)
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "가용 날짜가 맞는 동아리가 없어요..",
+                style = typography.M_18,
+                color = colors.black
+            )
+        }
     }
 
     Column(
@@ -101,8 +169,8 @@ fun MatchDetailScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
         ClubLookUpCard(
-            clubName = "FC Campus Ball",
-            collegeAndMajor = "건국대학교 축구 동아리",
+            clubName = ui.clubName.ifBlank { "—" },
+            collegeAndMajor = ui.departmentName.ifBlank { "—" },
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -114,17 +182,19 @@ fun MatchDetailScreen(
                 .padding(horizontal = 20.dp)
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-            DisabledField(label = "날짜", value = "2025/08/25 (월)", check = false)
+            DisabledField(
+                label = "날짜",
+                value = ui.startDate.replace("-", "/") + " (월)", // 요일 계산 로직 있으면 교체
+                check = false
+            )
 
             Spacer(modifier = Modifier.height(27.dp))
-            DisabledField(label = "경기 시간", value = "13:00", check = false)
+            DisabledField(label = "경기 시간", value = ui.startTime.ifBlank { "—" }, check = false)
 
             Spacer(modifier = Modifier.height(27.dp))
             DisabledField(
                 label = "동아리 소개",
-                value = "OOO는 교내 대회 수상한 이력이 있는 팀입니다!\n" +
-                        "안전하고 즐겁게 볼 차길 원합니다!\n" +
-                        "편하게 신청해주세요!",
+                value = ui.clubDescription.ifBlank { "—" },
                 check = true
             )
             Spacer(modifier = Modifier.height(27.dp))
@@ -141,7 +211,9 @@ fun MatchDetailScreen(
                     .height(53.dp)
                     .clip(shape = RoundedCornerShape(13.dp))
                     .background(colors.black, shape = RoundedCornerShape(13.dp))
-                    .clickable { otherTeamClicked = true }
+                    .clickable {
+                        otherTeamClicked = true
+                    }
             ) {
                 Text(
                     text = "다른 상대 찾기",
@@ -159,7 +231,7 @@ fun MatchDetailScreen(
                     .height(53.dp)
                     .clip(shape = RoundedCornerShape(13.dp))
                     .background(colors.skyblue, shape = RoundedCornerShape(13.dp))
-                    .clickable { isMatchButtonClicked = true }
+                    .clickable { vm.requestMatch() }
             ) {
                 Text(
                     text = "제안하기",
@@ -170,21 +242,13 @@ fun MatchDetailScreen(
         }
         Spacer(modifier = Modifier.height(27.dp))
     }
-    if (isMatchButtonClicked) {
-        SuccessModal(value = "매치를 제안하였습니다!", value2 = "상대 대표님께 제안이 들어갔어요!", buttonValue = "확인", onClick = {
-            navController.navigate(Route.Match.route)
-        })
-    }
 
-    LaunchedEffect(otherTeamClicked) {
-        if (otherTeamClicked) {
-            showLoading = true
-            kotlinx.coroutines.delay(2000)
-            showLoading = false
-            otherTeamClicked = false
-        }
-    }
-    if (showLoading) {
-        LoadingModal()
+    if (isMatchButtonClicked) {
+        SuccessModal(
+            value = "매치를 제안하였습니다!",
+            value2 = "상대 대표님께 제안이 들어갔어요!",
+            buttonValue = "확인",
+            onClick = { navController.navigate(Route.Match.route) }
+        )
     }
 }

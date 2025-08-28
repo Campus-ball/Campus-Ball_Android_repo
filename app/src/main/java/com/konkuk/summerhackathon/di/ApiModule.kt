@@ -6,6 +6,7 @@ import com.konkuk.summerhackathon.data.service.CollegeApi
 import com.konkuk.summerhackathon.data.service.DepartmentApi
 import com.konkuk.summerhackathon.data.service.UserApi
 import com.konkuk.summerhackathon.data.service.AvailabilityApi
+import com.konkuk.summerhackathon.data.service.MatchApi
 import com.konkuk.summerhackathon.data.service.MatchApiService
 import com.konkuk.summerhackathon.data.service.ProposalClubDetailApi
 import dagger.Module
@@ -65,4 +66,8 @@ object ApiModule {
     @Singleton
     fun provideUserApi(retrofit: Retrofit): UserApi =
         retrofit.create(UserApi::class.java)
+
+    @Provides @Singleton
+    fun provideMatchingApi(retrofit: Retrofit): MatchApi =
+        retrofit.create(MatchApi::class.java)
 }
