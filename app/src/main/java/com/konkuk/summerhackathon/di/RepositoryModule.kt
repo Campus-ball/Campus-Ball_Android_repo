@@ -1,15 +1,18 @@
 package com.konkuk.summerhackathon.di
 
-import dagger.Binds
+import com.konkuk.summerhackathon.data.repositoryimpl.AuthRepositoryImpl
+import com.konkuk.summerhackathon.domain.repository.AuthRepository
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-//    @Binds
-//    @Singleton
-//    abstract fun bindsHomeRepository(homeRepositoryImpl: HomeRepositoryImpl): HomeRepository
+object RepositoryModule {
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(impl: AuthRepositoryImpl): AuthRepository = impl
 }

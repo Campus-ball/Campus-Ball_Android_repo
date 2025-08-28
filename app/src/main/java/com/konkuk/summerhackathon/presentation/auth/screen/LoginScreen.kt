@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.util.noRippleClickable
@@ -26,11 +27,13 @@ import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
 @Composable
 fun LoginScreen(
-    viewModel: AuthViewModel = viewModel(),
+    //viewModel: AuthViewModel = viewModel(),
     onLoginSuccess: () -> Unit = {},
     onSignUpClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val viewModel: AuthViewModel = hiltViewModel()
+
     val mergedError: String? =
         viewModel.idError ?: viewModel.pwError ?: viewModel.loginError
 

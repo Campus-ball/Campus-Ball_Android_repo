@@ -1,5 +1,6 @@
 package com.konkuk.summerhackathon.di
 
+import com.konkuk.summerhackathon.data.service.AuthApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,8 +11,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
-//    @Provides
-//    @Singleton
-//    fun providesHomeService(retrofit: Retrofit): HomeService =
-//        retrofit.create(HomeService::class.java)
+
+    @Provides @Singleton
+    fun provideAuthApi(retrofit: Retrofit): AuthApi =
+        retrofit.create(AuthApi::class.java)
 }

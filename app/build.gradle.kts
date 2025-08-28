@@ -25,7 +25,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+        buildConfigField("String", "BASE_URL", "\"${properties["base.url"]}\"")
     }
 
     buildTypes {
@@ -93,4 +93,6 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.manager)
+
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 }
