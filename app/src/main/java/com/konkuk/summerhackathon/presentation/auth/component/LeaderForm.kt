@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.core.component.DuplicateTextField
 import com.konkuk.summerhackathon.core.component.FormActionButton
@@ -28,6 +30,7 @@ import com.konkuk.summerhackathon.core.component.NameTextField
 import com.konkuk.summerhackathon.core.component.RequiredTextField
 import com.konkuk.summerhackathon.data.dto.response.CollegeListResponse
 import com.konkuk.summerhackathon.data.dto.response.DepartmentListResponse
+import com.konkuk.summerhackathon.presentation.auth.viewmodel.DuplCheckViewModel
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
@@ -66,7 +69,21 @@ fun LeaderForm(
     colleges: List<CollegeListResponse.College> = emptyList(),
     departments: List<DepartmentListResponse.Department> = emptyList(),
     onCollegeSelected: (Int) -> Unit = {},
+    viewModel: DuplCheckViewModel = hiltViewModel()
+
 ) {
+
+    // 닉네임 중복 체크용
+    val isNicknameValid by viewModel.isValid.collectAsState()
+    val error by viewModel.errorMessage.collectAsState()
+
+
+
+
+
+
+
+
     var name by rememberSaveable { mutableStateOf("") }
     val isNameValid = remember(name) { SignUpValidators.isValidName(name) }
 

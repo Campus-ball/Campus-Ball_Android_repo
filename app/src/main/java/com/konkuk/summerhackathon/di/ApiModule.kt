@@ -7,6 +7,7 @@ import com.konkuk.summerhackathon.data.service.DepartmentApi
 import com.konkuk.summerhackathon.data.service.UserApi
 import com.konkuk.summerhackathon.data.service.AvailabilityApi
 import com.konkuk.summerhackathon.data.service.ClubApi
+import com.konkuk.summerhackathon.data.service.DuplCheckApi
 import com.konkuk.summerhackathon.data.service.MatchApi
 import com.konkuk.summerhackathon.data.service.MatchApiService
 import com.konkuk.summerhackathon.data.service.ProposalClubDetailApi
@@ -25,6 +26,12 @@ object ApiModule {
 //    @Singleton
 //    fun providesHomeService(retrofit: Retrofit): HomeService =
 //        retrofit.create(HomeService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideDuplCheckApi(retrofit: Retrofit): DuplCheckApi =
+        retrofit.create(DuplCheckApi::class.java)
+
     @Provides
     @Singleton
     fun provideClubApi(retrofit: Retrofit): ClubApi =
@@ -72,7 +79,8 @@ object ApiModule {
     fun provideUserApi(retrofit: Retrofit): UserApi =
         retrofit.create(UserApi::class.java)
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideMatchingApi(retrofit: Retrofit): MatchApi =
         retrofit.create(MatchApi::class.java)
 }
