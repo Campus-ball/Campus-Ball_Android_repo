@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
+import com.konkuk.summerhackathon.data.dto.request.MatchRequest
 import com.konkuk.summerhackathon.data.dto.response.ReceivedMatchResponse
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.presentation.proposal.component.ProposalCard
@@ -94,6 +95,17 @@ fun ProposalScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.actionResult.collect { isSuccess ->
+            if (isSuccess) {
+                Toast.makeText(context, "성공!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "실패!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
     if (isLoading) {
         CircularProgressIndicator()
     } else {
@@ -132,7 +144,7 @@ fun ProposalScreen(
                         .verticalScroll(scrollState),
                     verticalArrangement = Arrangement.spacedBy(15.dp),
                 ) {
-                    if (testEvents.isEmpty()) {
+                    if (events.isEmpty()) {
                         Spacer(modifier = Modifier.size(200.dp))
                         Text(
                             text = "받은 신청 내역이 없습니다.",
@@ -152,8 +164,13 @@ fun ProposalScreen(
                                 clubName = event.clubName,
 //                        clubIcon = event.clubLogoUrl,     //TODO: 동아리 아이콘 url로 변경
                                 universityAndMajor = event.departmentName,
-                                onAccept = {},              // TODO: 수락 api 연결
-                                onDecline = {}              // TODO: 거절 api 연결
+                                onAccept = {
+                                    viewModel.acceptMatch(MatchRequest(event.requestId))
+                                },              // TODO: 수락 api 연결
+                                onDecline = {
+                                    viewModel.rejectMatch(MatchRequest(event.requestId))
+
+                                }              // TODO: 거절 api 연결
                             )
                         }
                     /*      ProposalCard(isRandomMatching = true)
