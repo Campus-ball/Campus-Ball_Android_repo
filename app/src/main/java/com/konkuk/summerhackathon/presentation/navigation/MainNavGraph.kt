@@ -29,7 +29,7 @@ fun MainNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Route.ComponentLookUp.route,
+        startDestination = Route.Match.route,
     ) {
         composable(route = Route.Login.route) {
             LoginScreen(
