@@ -244,7 +244,7 @@ fun ScheduleScreen(
                             },
                             modifier = Modifier.fillMaxWidth(),
                             clubName = event.clubName,
-//                        clubIcon = event.clubLogoUrl,     //TODO: 동아리 아이콘 url로 변경
+                            clubIcon = event.clubLogoUrl,     //TODO: 동아리 아이콘 url로 변경
                             universityAndMajor = event.departmentName,
                             kakaoTalkLink = event.chatUrl
                         )

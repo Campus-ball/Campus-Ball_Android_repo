@@ -162,11 +162,11 @@ fun ProposalScreen(
                                 },
                                 modifier = Modifier.fillMaxWidth(),
                                 clubName = event.clubName,
-//                        clubIcon = event.clubLogoUrl,     //TODO: 동아리 아이콘 url로 변경
+                                clubIcon = event.clubLogoUrl,
                                 universityAndMajor = event.departmentName,
                                 onAccept = {
                                     viewModel.acceptMatch(MatchRequest(event.requestId))
-                                },              // TODO: 수락 api 연결
+                                },
                                 onDecline = {
                                     viewModel.rejectMatch(MatchRequest(event.requestId))
 

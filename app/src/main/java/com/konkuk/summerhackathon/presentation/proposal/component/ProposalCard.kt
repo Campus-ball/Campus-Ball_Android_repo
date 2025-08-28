@@ -23,10 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
@@ -36,7 +40,7 @@ import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 fun ProposalCard(
     modifier: Modifier = Modifier,
     clubName: String = "동아리 이름",
-    clubIcon: Int = R.drawable.ic_launcher_background,
+    clubIcon: String? = "",
     universityAndMajor: String = "OO대학교 OOO학과",
     onAccept: () -> Unit = {},
     onDecline: () -> Unit = {},
@@ -73,12 +77,17 @@ fun ProposalCard(
                         .padding(horizontal = 15.dp, vertical = 18.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        painter = painterResource(id = clubIcon),
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(clubIcon)          // String URL
+                            .crossfade(true)
+                            .build(),
                         contentDescription = "동아리 이미지",
                         modifier = Modifier
                             .clip(CircleShape)
                             .size(65.dp),
+                        placeholder = painterResource(R.drawable.img_basic_icon),
+                        error = painterResource(R.drawable.img_basic_icon)
                     )
 
                     Spacer(Modifier.width(19.dp))

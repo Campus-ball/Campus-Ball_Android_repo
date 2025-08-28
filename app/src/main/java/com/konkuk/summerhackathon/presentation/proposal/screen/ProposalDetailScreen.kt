@@ -98,7 +98,7 @@ fun ProposalDetailScreen(
                 modifier = Modifier.padding(horizontal = 26.dp),
 //                clubName = opponent?.clubName ?: "동아리 이름",
                 clubName = opponent?.clubName ?: "동아리 이름",
-//                clubIcon = opponent?.clubLogoUrl,
+                clubIcon = opponent?.clubLogoUrl,
                 collegeAndMajor = opponent?.departmentName ?: "한양대학교 전기전자공학과",
                 onClick = {},
             )

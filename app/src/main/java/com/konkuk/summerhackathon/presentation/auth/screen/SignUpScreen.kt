@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
@@ -31,6 +32,7 @@ import com.konkuk.summerhackathon.core.util.noRippleClickable
 import com.konkuk.summerhackathon.presentation.auth.component.ClubRoleTabs
 import com.konkuk.summerhackathon.presentation.auth.component.LeaderForm
 import com.konkuk.summerhackathon.presentation.auth.component.MemberForm
+import com.konkuk.summerhackathon.presentation.auth.viewmodel.ImageUploadViewModel
 import com.konkuk.summerhackathon.presentation.auth.viewmodel.SignUpViewModel
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
@@ -41,8 +43,9 @@ enum class ClubRole { Leader, Member }
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    vm: SignUpViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+    vm: SignUpViewModel = androidx.hilt.navigation.compose.hiltViewModel(),
 ) {
+    val uploadVm: ImageUploadViewModel = hiltViewModel()
     var role by rememberSaveable { mutableStateOf(ClubRole.Leader) }
 
     val colleges by vm.colleges.collectAsState()
@@ -117,6 +120,7 @@ fun SignUpScreen(
                     colleges = colleges,
                     departments = departments,
                     onCollegeSelected = { id -> vm.loadDepartments(id) },
+                    uploadVm = uploadVm
                 )
             ClubRole.Member ->
                 MemberForm(navController = navController)

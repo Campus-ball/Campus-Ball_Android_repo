@@ -1,5 +1,9 @@
 package com.konkuk.summerhackathon.presentation.auth.component
 
+import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,9 +33,17 @@ import com.konkuk.summerhackathon.core.component.NameTextField
 import com.konkuk.summerhackathon.core.component.RequiredTextField
 import com.konkuk.summerhackathon.data.dto.response.CollegeListResponse
 import com.konkuk.summerhackathon.data.dto.response.DepartmentListResponse
+import com.konkuk.summerhackathon.presentation.auth.viewmodel.ImageUploadViewModel
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 
 data class LeaderSignUpData(
     val name: String,
@@ -66,7 +79,34 @@ fun LeaderForm(
     colleges: List<CollegeListResponse.College> = emptyList(),
     departments: List<DepartmentListResponse.Department> = emptyList(),
     onCollegeSelected: (Int) -> Unit = {},
+    uploadVm: ImageUploadViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+
+    val uploadedUrl by uploadVm.uploadedUrl.collectAsState()
+    val uploading by uploadVm.isLoading.collectAsState()
+    val uploadError by uploadVm.error.collectAsState()
+
+    // 포토피커 (13+) + GetContent 폴백
+    val pickVisual = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        Log.d("ImageUploadVM", "PickVisualMedia result uri=$uri")
+        if (uri != null) {
+            logUriInfo(context, uri)
+            uploadVm.upload(uri, context.contentResolver)
+        }
+    }
+    val getContent = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        Log.d("ImageUploadVM", "GetContent result uri=$uri")
+        if (uri != null) {
+            logUriInfo(context, uri)
+            uploadVm.upload(uri, context.contentResolver)
+        }
+    }
+
     var name by rememberSaveable { mutableStateOf("") }
     val isNameValid = remember(name) { SignUpValidators.isValidName(name) }
 
@@ -96,6 +136,9 @@ fun LeaderForm(
     var clubLogoUriStr by rememberSaveable { mutableStateOf<String?>(null) }
 
     var kakaoOpenChatLink by rememberSaveable { mutableStateOf<String?>(null) }
+
+    // 업로드 성공 시 폼에 URL 반영
+    LaunchedEffect(uploadedUrl) { uploadedUrl?.let { clubLogoUriStr = it } }
 
     LaunchedEffect(colleges) {
         if (selectedCollegeId == null && colleges.isNotEmpty()) {
@@ -278,10 +321,21 @@ fun LeaderForm(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
+
             LogoPickerField(
                 value = clubLogoUriStr,
-                onValueChange = { clubLogoUriStr = it }
+                onValueChange = { picked ->
+                    Log.d("ImageUploadVM", "LogoPickerField onValueChange=$picked")
+                    clubLogoUriStr = picked                      // 화면 표시용
+                    picked?.let { uriStr ->
+                        // 여기서 바로 업로드 트리거
+                        runCatching { Uri.parse(uriStr) }.getOrNull()?.let { uri ->
+                            uploadVm.upload(uri, context.contentResolver)
+                        }
+                    }
+                }
             )
+
 
             Spacer(modifier = Modifier.height(16.dp))
             RequiredTextField(
@@ -293,5 +347,26 @@ fun LeaderForm(
 
             Spacer(modifier = Modifier.height(40.dp))
         }
+    }
+}
+
+private fun logUriInfo(context: Context, uri: Uri) {
+    try {
+        val cr = context.contentResolver
+        val type = cr.getType(uri)
+        var name: String? = null
+        var size: Long? = null
+        cr.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE), null, null, null)
+            ?.use { c ->
+                if (c.moveToFirst()) {
+                    val nameIdx = c.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    val sizeIdx = c.getColumnIndex(OpenableColumns.SIZE)
+                    if (nameIdx >= 0) name = c.getString(nameIdx)
+                    if (sizeIdx >= 0) size = c.getLong(sizeIdx)
+                }
+            }
+        Log.d("ImageUploadVM", "Picked uri=$uri, mime=$type, name=$name, size=$size")
+    } catch (t: Throwable) {
+        Log.e("ImageUploadVM", "logUriInfo error", t)
     }
 }
