@@ -37,6 +37,7 @@ import com.konkuk.summerhackathon.presentation.auth.component.ClubRoleTabs
 import com.konkuk.summerhackathon.presentation.auth.component.LeaderForm
 import com.konkuk.summerhackathon.presentation.auth.component.MemberForm
 import com.konkuk.summerhackathon.presentation.auth.viewmodel.DuplCheckViewModel
+import com.konkuk.summerhackathon.presentation.auth.viewmodel.ImageUploadViewModel
 import com.konkuk.summerhackathon.presentation.auth.viewmodel.SignUpViewModel
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
@@ -51,6 +52,7 @@ fun SignUpScreen(
 ) {
     val context = LocalContext.current
 
+    val uploadVm: ImageUploadViewModel = hiltViewModel()
     var role by rememberSaveable { mutableStateOf(ClubRole.Leader) }
 
     val colleges by vm.colleges.collectAsState()
@@ -126,6 +128,7 @@ fun SignUpScreen(
                     colleges = colleges,
                     departments = departments,
                     onCollegeSelected = { id -> vm.loadDepartments(id) },
+                    uploadVm = uploadVm
                 )
 
             ClubRole.Member ->
