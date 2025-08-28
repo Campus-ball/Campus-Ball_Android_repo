@@ -2,6 +2,7 @@ package com.konkuk.summerhackathon.di
 
 import com.konkuk.summerhackathon.data.service.CalendarApiService
 import com.konkuk.summerhackathon.data.service.AuthApi
+import com.konkuk.summerhackathon.data.service.UserApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,4 +27,8 @@ object ApiModule {
     @Provides @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
+
+    @Provides @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApi =
+        retrofit.create(UserApi::class.java)
 }

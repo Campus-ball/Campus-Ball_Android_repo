@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,29 +42,30 @@ import com.konkuk.summerhackathon.presentation.auth.component.SignUpValidators
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.presentation.settings.component.ConfirmModalBox
 import com.konkuk.summerhackathon.presentation.settings.component.OutlinePillButton
+import com.konkuk.summerhackathon.presentation.settings.viewmodel.MyAccountUi
+import com.konkuk.summerhackathon.presentation.settings.viewmodel.SettingsViewModel
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
-data class MyAccountUi(
-    val club: String = "",
-    val name: String = "",
-    val nickname: String = "",
-    val gender: String = "",
-    val contact: String = "",
-    val kakaoOpenChat: String = ""
-)
-
 @Composable
 fun SettingsScreen(
-    ui: MyAccountUi,
+    //ui: MyAccountUi,
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    vm: SettingsViewModel = androidx.hilt.navigation.compose.hiltViewModel()
 ) {
+    val ui by vm.ui.collectAsState()
+
     var saved by remember { mutableStateOf(ui) }
+    var draft by remember { mutableStateOf(ui) }
 
     var isEditMode by remember { mutableStateOf(false) }
     var isFormValid by remember { mutableStateOf(false) }
-    var draft by remember(saved) { mutableStateOf(saved) }
+
+    LaunchedEffect(ui) {
+        saved = ui
+        if (!isEditMode) draft = ui
+    }
 
     var showDone by remember { mutableStateOf(false) }
 
