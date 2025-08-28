@@ -2,9 +2,10 @@ package com.konkuk.summerhackathon.data.repositoryimpl
 
 import com.konkuk.summerhackathon.data.service.DuplCheckApi
 import com.konkuk.summerhackathon.domain.repository.DuplCheckRepository
+import javax.inject.Inject
 
 
-class DuplCheckRepositoryImpl(
+class DuplCheckRepositoryImpl @Inject constructor(
     private val api: DuplCheckApi
 ) : DuplCheckRepository {
 

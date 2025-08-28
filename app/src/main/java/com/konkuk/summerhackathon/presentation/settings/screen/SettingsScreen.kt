@@ -253,22 +253,22 @@ private fun ActiveForm(
         )
 
         Spacer(modifier = Modifier.height(6.dp))
-        DuplicateTextField(
-            title = "닉네임",
-            placeholder = "닉네임을 입력하세요",
-            text = nicknameInput,
-            onTextChange = {
-                nicknameInput = it
-                nicknameConfirmed = null
-                publish()
-            },
-            onConfirmed = { confirmed ->
-                nicknameConfirmed = confirmed
-                publish()
-            },
-            dummyTakenNicknames = setOf("배고픈 하마"),
-            error = "닉네임 중복 입니다"
-        )
+//        DuplicateTextField(
+//            title = "닉네임",
+//            placeholder = "닉네임을 입력하세요",
+//            text = nicknameInput,
+//            onTextChange = {
+//                nicknameInput = it
+//                nicknameConfirmed = null
+//                publish()
+//            },
+//            onConfirmed = { confirmed ->
+//                nicknameConfirmed = confirmed
+//                publish()
+//            },
+//            dummyTakenNicknames = setOf("배고픈 하마"),
+//            error = "닉네임 중복 입니다"
+//        )
 
         Spacer(modifier = Modifier.height(6.dp))
         GenderSegmentedField(

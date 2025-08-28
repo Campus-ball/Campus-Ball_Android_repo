@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,8 +25,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.core.component.DuplicateTextField
 import com.konkuk.summerhackathon.core.component.FormActionButton
@@ -36,16 +40,8 @@ import com.konkuk.summerhackathon.data.dto.response.CollegeListResponse
 import com.konkuk.summerhackathon.data.dto.response.DepartmentListResponse
 import com.konkuk.summerhackathon.presentation.auth.viewmodel.DuplCheckViewModel
 import com.konkuk.summerhackathon.presentation.auth.viewmodel.ImageUploadViewModel
-import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
 
 data class LeaderSignUpData(
     val name: String,
@@ -85,12 +81,15 @@ fun LeaderForm(
     uploadVm: ImageUploadViewModel = hiltViewModel()
 ) {
 
-    // 닉네임 중복 체크용
     val isNicknameValid by viewModel.isNicknameValid.collectAsState()
-    val error by viewModel.errorMessage.collectAsState()
-
     val isUserIdValid by viewModel.isUserIdValid.collectAsState()
-    val userError by viewModel.errorMessage.collectAsState()
+    val vmError by viewModel.errorMessage.collectAsState()
+
+    var isCheckingNickname by remember { mutableStateOf(false) }
+    var isCheckingUserId by remember { mutableStateOf(false) }
+
+    val nicknameState by viewModel.nicknameState.collectAsStateWithLifecycle()
+    val userIdState by viewModel.userIdState.collectAsStateWithLifecycle()
 
     /*    //todo: 아래와 같이 뷰모델 연결
         viewModel.checkNickname(nickname = "닉네임")
@@ -246,12 +245,16 @@ fun LeaderForm(
             Spacer(modifier = Modifier.height(6.dp))
             DuplicateTextField(
                 title = "닉네임",
-                placeholder = "닉네임을 입력하세요",
+                error = "닉네임 중복 입니다",
                 text = nicknameInput,
-                onTextChange = { nicknameInput = it },
+                onTextChange = {
+                    nicknameInput = it
+                    nicknameConfirmed = null
+                    viewModel.resetNickname()            // ← 입력 바뀌면 즉시 Idle
+                },
                 onConfirmed = { confirmed -> nicknameConfirmed = confirmed },
-                dummyTakenNicknames = setOf("배고픈 하마"),
-                error = "닉네임 중복 입니다"
+                serverCheck = { value -> viewModel.checkNickname(value) }, // 클릭 즉시 Checking
+                checkState = nicknameState
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -263,12 +266,16 @@ fun LeaderForm(
             Spacer(modifier = Modifier.height(16.dp))
             DuplicateTextField(
                 title = "아이디",
-                placeholder = "아이디를 입력하세요",
+                error = "아이디 중복 입니다",
                 text = userId,
-                onTextChange = { userId = it },
+                onTextChange = {
+                    userId = it
+                    userIdConfirmed = null
+                    viewModel.resetUserId()
+                },
                 onConfirmed = { confirmed -> userIdConfirmed = confirmed },
-                dummyTakenNicknames = setOf("hungry"),
-                error = "아이디 중복 입니다"
+                serverCheck = { value -> viewModel.checkUserId(value) },
+                checkState = userIdState
             )
 
             Spacer(modifier = Modifier.height(6.dp))
