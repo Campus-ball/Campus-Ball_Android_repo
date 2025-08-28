@@ -7,6 +7,7 @@ import com.konkuk.summerhackathon.data.service.DepartmentApi
 import com.konkuk.summerhackathon.data.service.UserApi
 import com.konkuk.summerhackathon.data.service.AvailabilityApi
 import com.konkuk.summerhackathon.data.service.MatchApiService
+import com.konkuk.summerhackathon.data.service.ProposalClubDetailApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +23,13 @@ object ApiModule {
 //    @Singleton
 //    fun providesHomeService(retrofit: Retrofit): HomeService =
 //        retrofit.create(HomeService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideProposalDetailApi(retrofit: Retrofit): ProposalClubDetailApi =
+        retrofit.create(ProposalClubDetailApi::class.java)
+
+
     @Provides
     @Singleton
     fun provideMatchApi(retrofit: Retrofit): MatchApiService =
@@ -43,15 +51,18 @@ object ApiModule {
     fun provideAuthApi(retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideCollegeApi(retrofit: Retrofit): CollegeApi =
         retrofit.create(CollegeApi::class.java)
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideDepartmentApi(retrofit: Retrofit): DepartmentApi =
         retrofit.create(DepartmentApi::class.java)
-        
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     fun provideUserApi(retrofit: Retrofit): UserApi =
         retrofit.create(UserApi::class.java)
 }
