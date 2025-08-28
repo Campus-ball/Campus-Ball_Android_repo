@@ -240,7 +240,8 @@ fun ScheduleScreen(
                         ScheduleClubCard(
                             isRandomMatching = event.matchType == "랜덤 매칭 요청",
                             onClickCard = {
-                                navController.navigate(Route.ScheduleDetail.route)
+                                navController.navigate("${Route.ScheduleDetail.route}/${event.clubId}")
+//                                navController.navigate(Route.ScheduleDetail.route)
                             },
                             modifier = Modifier.fillMaxWidth(),
                             clubName = event.clubName,
