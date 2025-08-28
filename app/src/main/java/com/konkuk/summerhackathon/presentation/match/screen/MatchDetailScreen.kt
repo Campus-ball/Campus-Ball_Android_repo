@@ -74,6 +74,7 @@ fun MatchDetailScreen(
                 )
             )
             .padding(horizontal = 20.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         CampusBallTopBar()
         Spacer(modifier = Modifier.height(21.dp))
@@ -167,6 +168,7 @@ fun MatchDetailScreen(
                 )
             }
         }
+        Spacer(modifier = Modifier.height(27.dp))
     }
     if (isMatchButtonClicked) {
         SuccessModal(value = "매치를 제안하였습니다!", value2 = "상대 대표님께 제안이 들어갔어요!", buttonValue = "확인", onClick = {

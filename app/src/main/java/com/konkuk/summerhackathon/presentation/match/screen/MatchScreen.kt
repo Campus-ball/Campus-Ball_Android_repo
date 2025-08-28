@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
@@ -58,6 +59,11 @@ fun MatchScreen(
     val randomSlogan = remember { slogans.random() }
 
     Box(
+        modifier = modifier.fillMaxSize().zIndex(1f)
+    ){
+        CampusBallTopBar()
+    }
+    Box(
         modifier = modifier
             .fillMaxSize()
             .background(
@@ -73,10 +79,7 @@ fun MatchScreen(
         ,
         contentAlignment = Alignment.TopCenter
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CampusBallTopBar()
-        }
-
+        Spacer(modifier = Modifier.height(52.dp))
         Image(
             painter = painterResource(R.drawable.img_match_logo),
             contentDescription = null,
