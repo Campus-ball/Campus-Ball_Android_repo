@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -43,6 +44,9 @@ fun SignUpScreen(
     vm: SignUpViewModel = androidx.hilt.navigation.compose.hiltViewModel()
 ) {
     var role by rememberSaveable { mutableStateOf(ClubRole.Leader) }
+
+    val colleges by vm.colleges.collectAsState()
+    val departments by vm.departments.collectAsState()
 
     LaunchedEffect(Unit) {
         vm.events.collect { ev ->
@@ -109,7 +113,10 @@ fun SignUpScreen(
             ClubRole.Leader ->
                 LeaderForm(
                     navController = navController,
-                    onSubmit = { data -> vm.signUpLeader(data) }
+                    onSubmit = { data -> vm.signUpLeader(data) },
+                    colleges = colleges,
+                    departments = departments,
+                    onCollegeSelected = { id -> vm.loadDepartments(id) },
                 )
             ClubRole.Member ->
                 MemberForm(navController = navController)
