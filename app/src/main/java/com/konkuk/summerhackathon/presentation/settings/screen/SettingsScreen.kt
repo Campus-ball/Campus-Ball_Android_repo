@@ -170,8 +170,16 @@ fun SettingsScreen(
         message = "로그아웃 하시겠습니까?",
         leftText = "취소",
         rightText = "확인",
-        onLeft  = { showLogout = false },
-        onRight = { navController.navigate(Route.Login.route) },
+        onLeft = { showLogout = false },
+        onRight = {
+            navController.navigate(Route.Login.route) {
+                popUpTo(com.konkuk.summerhackathon.presentation.navigation.Route.Login.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        },
         onDismiss = { showLogout = false }
     )
     ConfirmModalBox(
@@ -179,8 +187,16 @@ fun SettingsScreen(
         message = "정말로 탈퇴 하시겠습니까?",
         leftText = "취소",
         rightText = "확인",
-        onLeft  = { showOut = false },
-        onRight = { navController.navigate(Route.Login.route) },
+        onLeft = { showOut = false },
+        onRight = {
+            navController.navigate(Route.Login.route) {
+                popUpTo(com.konkuk.summerhackathon.presentation.navigation.Route.Login.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        },
         onDismiss = { showOut = false }
     )
 }
@@ -315,7 +331,7 @@ private fun InactiveForm(
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             Text(
                 text = "로그아웃",
                 style = typography.M_14,
