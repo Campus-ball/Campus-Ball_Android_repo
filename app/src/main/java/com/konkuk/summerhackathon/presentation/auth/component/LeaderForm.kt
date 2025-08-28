@@ -31,7 +31,6 @@ import com.konkuk.summerhackathon.core.component.RequiredTextField
 import com.konkuk.summerhackathon.data.dto.response.CollegeListResponse
 import com.konkuk.summerhackathon.data.dto.response.DepartmentListResponse
 import com.konkuk.summerhackathon.presentation.auth.viewmodel.DuplCheckViewModel
-import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
@@ -74,14 +73,15 @@ fun LeaderForm(
 ) {
 
     // 닉네임 중복 체크용
-    val isNicknameValid by viewModel.isValid.collectAsState()
+    val isNicknameValid by viewModel.isNicknameValid.collectAsState()
     val error by viewModel.errorMessage.collectAsState()
 
+    val isUserIdValid by viewModel.isUserIdValid.collectAsState()
+    val userError by viewModel.errorMessage.collectAsState()
 
-
-
-
-
+    /*    //todo: 아래와 같이 뷰모델 연결
+        viewModel.checkNickname(nickname = "닉네임")
+        viewModel.checkUserId(userId = "유저 아이디")*/
 
 
     var name by rememberSaveable { mutableStateOf("") }

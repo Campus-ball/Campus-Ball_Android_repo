@@ -17,5 +17,15 @@ class DuplCheckRepositoryImpl(
         }
     }
 
+
+    override suspend fun checkUserId(userId: String): Result<Boolean> {
+        return try {
+            val response = api.checkUserId(userId)
+            Result.success(response.data.isValid)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }
 
