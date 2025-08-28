@@ -1,4 +1,4 @@
-package com.konkuk.summerhackathon.presentation.auth.component
+package com.konkuk.summerhackathon.core.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
