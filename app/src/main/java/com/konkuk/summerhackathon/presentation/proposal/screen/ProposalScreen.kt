@@ -94,7 +94,7 @@ fun ProposalScreen(
                         .verticalScroll(scrollState),
                     verticalArrangement = Arrangement.spacedBy(15.dp),
                 ) {
-                    if (events == null || events.isEmpty()) {
+                    if (events.isEmpty()) {
                         Spacer(modifier = Modifier.size(200.dp))
                         Text(
                             text = "받은 신청 내역이 없습니다.",

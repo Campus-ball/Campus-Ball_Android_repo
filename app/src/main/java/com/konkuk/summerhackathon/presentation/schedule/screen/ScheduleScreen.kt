@@ -233,8 +233,9 @@ fun ScheduleScreen(
                 Modifier.padding(horizontal = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                if (!testMatchEvents.isEmpty()) {   //todo: 실제 데이터로 변경
-                    testMatchEvents.forEach { event ->
+
+                if (!matchEvents.isEmpty()) {
+                    matchEvents.forEach { event ->
                         ScheduleClubCard(
                             isRandomMatching = event.matchType == "랜덤 매칭 요청",
                             onClickCard = {
@@ -247,6 +248,14 @@ fun ScheduleScreen(
                             kakaoTalkLink = event.chatUrl
                         )
                     }
+                } else {
+                    Spacer(modifier = Modifier.size(20.dp))
+                    Text(
+                        text = "성사된 경기가 없습니다.",
+                        style = defaultCampusBallTypography.B_20,
+                        color = defaultCampusBallColors.likeblack,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
                 }
             }
 
