@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
@@ -78,6 +79,24 @@ fun ScheduleCalendar(
             endDate = "2025-08-22",
             startTime = "13:00",
             endTime = "15:00",
+        ),
+        CalendarEventDto(
+            eventId = 6,
+            eventType = EventType.MATCH,
+            title = "축구 경기",
+            startDate = "2025-08-22",
+            endDate = "2025-08-22",
+            startTime = "13:00",
+            endTime = "15:00",
+        ),
+        CalendarEventDto(
+            eventId = 6,
+            eventType = EventType.ACADEMIC,
+            title = "축구 경기",
+            startDate = "2025-08-22",
+            endDate = "2025-08-22",
+            startTime = "13:00",
+            endTime = "15:00",
         )
     )
 
@@ -102,20 +121,20 @@ fun ScheduleCalendar(
             onMonthChanged = { newMonth ->
                 currentYearMonth = newMonth
             },
-            events = testEvents
+            events = events     //TODO: 실제 이벤트값으로 나중에 변경
         )
-        Row {
-            Text(
-                text = "${currentYearMonth}-${selectedDateTime.dayOfMonth}일 : ",
-                style = typography.M_18,
-                color = colors.likeblack,
-            )
-            Text(
-                text = "일정",
-                style = typography.M_18,
-                color = colors.likeblack,
-            )
-        }
+        /*        Row {
+                    Text(
+                        text = "${currentYearMonth}-${selectedDateTime.dayOfMonth}일 : ",
+                        style = typography.M_18,
+                        color = colors.likeblack,
+                    )
+                    Text(
+                        text = "일정",
+                        style = typography.M_18,
+                        color = colors.likeblack,
+                    )
+                }*/
     }
 }
 
@@ -269,6 +288,7 @@ fun CalendarGrid(
             }
 
             var backgroundColor = Color.Transparent
+
 //            if (foundEvent != null) {
 //                backgroundColor = when (foundEvent.eventType) {
 //                    EventType.ACADEMIC -> Color(0xff33B4F9)
@@ -277,19 +297,21 @@ fun CalendarGrid(
 //                }
 //            }
 
-            if (hasAcademyEvent)
-                backgroundColor = Color(0xff33B4F9)
-            if (hasMatchEvent)
-                backgroundColor = Color(0xFFF04D23)
-            if (hasAvailabilityEvent)
-                backgroundColor = Color(0xffF9C433)
+//            if (hasAcademyEvent)
+//                backgroundColor = Color(0xff33B4F9)
+//            if (hasMatchEvent)
+//                backgroundColor = Color(0xFFF04D23)
+//            if (hasAvailabilityEvent)
+//                backgroundColor = Color(0xffF9C433)
 
 
             /*                if (isSelected) {
                             Color(0xFFF04D23)
                         } else Color.Transparent    */
-            val textColor = if (backgroundColor == Color.Transparent) Color(0xFF4A5660)
-            else colors.white
+            /*            val textColor = if (backgroundColor == Color.Transparent) Color(0xFF4A5660)
+                        else colors.white*/
+
+            val textColor = Color(0xFF4A5660)
 
 //            val textColor=if (isSelected) colors.white else Color(0xFF4A5660)
 
@@ -299,19 +321,31 @@ fun CalendarGrid(
                     .aspectRatio(1f)
                     .padding(4.dp)
                     .clip(CircleShape)
-                    .background(backgroundColor)
+//                    .background(backgroundColor)
                     .clickable {
                         val newDateTime = date.atTime(selectedDateTime.toLocalTime())
                         onDateTimeSelected(newDateTime)
                     },
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = day.toString(),
-                    style = if (!isSelected) typography.SB_14 else typography.B_24.copy(fontSize = 14.sp),
-                    color = textColor,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = day.toString(),
+                        style = if (!isSelected) typography.SB_14 else typography.B_24.copy(fontSize = 14.sp),
+                        color = textColor,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                    )
+                    Spacer(Modifier.height(2.dp))
+                    ScheduleEventCircle(
+                        Modifier,
+                        hasMatchEvent,
+                        hasAvailabilityEvent,
+                        hasAcademyEvent
+                    )
+                }
             }
         }
     }
