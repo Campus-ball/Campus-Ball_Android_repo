@@ -160,6 +160,7 @@ fun MatchScreen(
                             .height(90.dp)
                             .fillMaxWidth()
                             .padding(horizontal = 40.dp)
+                            .clip(RoundedCornerShape(100.dp))
                             .background(colors.skyblue, shape = RoundedCornerShape(100.dp))
                             .clickable {
                                 navController.navigate(Route.MatchDetail.route)
