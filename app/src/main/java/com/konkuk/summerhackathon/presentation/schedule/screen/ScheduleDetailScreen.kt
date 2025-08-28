@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -28,10 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
-import com.konkuk.summerhackathon.core.component.SuccessModal
 import com.konkuk.summerhackathon.presentation.clublookup.component.ClubLookUpCard
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalendar
-import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleClubCard
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.typography
 
@@ -90,7 +87,7 @@ fun ScheduleDetailScreen(
             )
             ScheduleCalendar(
                 modifier = Modifier
-                    .height(348.dp)
+                    .height(348.dp),
             )
         }
 
@@ -107,7 +104,7 @@ fun ScheduleDetailScreen(
             )
             ScheduleCalendar(
                 modifier = Modifier
-                    .height(348.dp)
+                    .height(348.dp),
             )
         }
         Spacer(Modifier.height(23.dp))
