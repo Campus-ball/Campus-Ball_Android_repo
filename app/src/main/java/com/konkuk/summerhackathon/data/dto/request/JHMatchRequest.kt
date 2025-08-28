@@ -13,6 +13,6 @@ data class MatchRequest(
 // 친선 경기 신청 위한 api
 @Serializable
 data class MatchSendRequest(
-    @SerialName("clubId")
-    val clubId: Int
+    @SerialName("cludId")
+    val cludId: Int
 )

@@ -66,6 +66,19 @@ fun MainNavGraph(
         composable(route = Route.ScheduleDetail.route) {
             ScheduleDetailScreen(modifier = modifier)
         }
+
+        composable(
+            route = "${Route.ScheduleDetail.route}/{clubId}",
+            arguments = listOf(navArgument("clubId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val clubId = backStackEntry.arguments?.getInt("clubId") ?: -1
+            ScheduleDetailScreen(modifier = modifier, clubId = clubId)
+            Log.d("ScheduleDetail clubId", clubId.toString())
+        }
+
+
+
+
         composable(route = Route.ScheduleAvailable.route) {
             ScheduleAvailableScreen(modifier = modifier, navController = navController)
         }
@@ -97,7 +110,14 @@ fun MainNavGraph(
             ComponentLookUpScreen(modifier = modifier, navController = navController)
         }
 
-
+        composable(
+            route = "${Route.ComponentLookUp.route}/{clubId}",
+            arguments = listOf(navArgument("clubId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val clubId = backStackEntry.arguments?.getInt("clubId") ?: -1
+            ComponentLookUpScreen(modifier = modifier, navController = navController, clubId = clubId)
+            Log.d("ComponentLookUp requestId", clubId.toString())
+        }
 
 
         composable(route = Route.Match.route) {

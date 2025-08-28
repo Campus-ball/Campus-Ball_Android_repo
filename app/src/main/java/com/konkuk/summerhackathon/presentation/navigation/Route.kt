@@ -15,7 +15,6 @@ sealed class Route(
     data object ClubLookUp : Route("club_lookup/{departmentId}") {
         fun path(departmentId: Int) = "club_lookup/$departmentId"
     }
-    data object ClubLookUpWithArg : Route(route = "$ClubLookUp/{collegeId}")    // 동아리 선택 화면
     data object ComponentLookUp : Route(route = "component_lookup")    // 동아리 클릭 시 일정 확인
 
     data object Match : Route(route = "match")

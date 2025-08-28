@@ -69,14 +69,18 @@ class MainActivity : ComponentActivity() {
                     Route.MatchDetail.route -> false
                     Route.ProposalDetail.route -> false
                     "${Route.ProposalDetail.route}/{clubId}" -> false
+                    "${Route.ComponentLookUp.route}/{clubId}" -> false
+                    "${Route.ScheduleDetail.route}/{clubId}" -> false
                     else -> true
                 }
 
                 val backArrowRoutes = setOf(
                     Route.ScheduleDetail.route,
+                    "${Route.ScheduleDetail.route}/{clubId}",
                     Route.ScheduleAvailable.route,
                     Route.ClubLookUp.route,
                     Route.ComponentLookUp.route,
+                    "${Route.ComponentLookUp.route}/{clubId}",
                     Route.ProposalDetail.route,
                     "${Route.ProposalDetail.route}/{clubId}",
                 )

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -118,7 +119,7 @@ fun ProposalDetailScreen(
                 )
                 ScheduleCalendar(
                     modifier = Modifier
-                        .height(348.dp),
+                        .heightIn(max = 500.dp),
                     events = myCalendar
                 )
             }
@@ -136,7 +137,7 @@ fun ProposalDetailScreen(
                 )
                 ScheduleCalendar(
                     modifier = Modifier
-                        .height(348.dp),
+                        .heightIn(max = 500.dp),
                     events = opponentCalendar
                 )
             }
