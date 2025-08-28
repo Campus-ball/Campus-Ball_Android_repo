@@ -19,8 +19,8 @@ import com.konkuk.summerhackathon.presentation.proposal.screen.ProposalScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleAvailableScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleDetailScreen
 import com.konkuk.summerhackathon.presentation.schedule.screen.ScheduleScreen
-import com.konkuk.summerhackathon.presentation.settings.screen.MyAccountUi
 import com.konkuk.summerhackathon.presentation.settings.screen.SettingsScreen
+import com.konkuk.summerhackathon.presentation.settings.viewmodel.MyAccountUi
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -124,7 +124,7 @@ fun MainNavGraph(
             }
 
             SettingsScreen(
-                ui = dummyUi,
+                //ui = dummyUi,
                 modifier = modifier,
                 navController = navController
             )
