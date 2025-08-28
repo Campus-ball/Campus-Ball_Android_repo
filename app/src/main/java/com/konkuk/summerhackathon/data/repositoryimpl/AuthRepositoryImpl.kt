@@ -26,6 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
     override suspend fun logout() {
+        runCatching { api.logout() }
         tokenManager.clear()
     }
 
