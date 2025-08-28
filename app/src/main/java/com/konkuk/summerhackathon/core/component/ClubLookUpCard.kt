@@ -1,4 +1,4 @@
-package com.konkuk.summerhackathon.presentation.clublookup.component
+package com.konkuk.summerhackathon.core.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,7 +34,7 @@ import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 fun ClubLookUpCard(
     modifier: Modifier = Modifier,
     clubName: String = "동아리 이름",
-    clubIcon: Int = R.drawable.ic_launcher_background,
+    clubIcon: Int = R.drawable.img_basic_icon,
     collegeAndMajor: String = "OO대학교 OOO학과",
     onClick: () -> Unit = {}
 ) {

@@ -41,7 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.summerhackathon.R
 import com.konkuk.summerhackathon.core.component.CampusBallTopBar
 import com.konkuk.summerhackathon.core.component.SuccessModal
-import com.konkuk.summerhackathon.presentation.clublookup.component.ClubLookUpCard
+import com.konkuk.summerhackathon.core.component.ClubLookUpCard
 import com.konkuk.summerhackathon.presentation.navigation.Route
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalendar
 import com.konkuk.summerhackathon.ui.theme.SummerHackathonTheme.colors
