@@ -32,9 +32,10 @@ import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 @Composable
 fun ClubLookUpScreen(
     modifier: Modifier = Modifier,
-    collegeId: Int = 0,
+    collegeId: Int,
     navController: NavHostController
 ) {
+    Text(text = "collegeId: $collegeId")
     val scrollState = rememberScrollState()
     Box(
         modifier = modifier
@@ -86,11 +87,4 @@ fun ClubLookUpScreen(
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun LookUpClubScreenPreview() {
-    val navController = rememberNavController()
-    ClubLookUpScreen(navController = navController)
 }

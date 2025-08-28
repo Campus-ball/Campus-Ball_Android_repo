@@ -4,12 +4,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.konkuk.summerhackathon.domain.repository.DepartmentRepository
+import com.konkuk.summerhackathon.presentation.auth.viewmodel.SignUpViewModel.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class ClubLookUpViewModel @Inject constructor(
+    private val departmentRepository: DepartmentRepository
 ) : ViewModel() {
+    companion object { private const val TAG = "ClubLookUpView" }
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _events = Channel<Event>(Channel.BUFFERED)
+    val events: Flow<Event> = _events.receiveAsFlow()
 
     var universities by mutableStateOf(listOf<String>())
         private set

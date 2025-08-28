@@ -42,7 +42,6 @@ class SignUpViewModel @Inject constructor(
         MutableStateFlow<List<DepartmentListResponse.Department>>(emptyList())
     val departments: StateFlow<List<DepartmentListResponse.Department>> = _departments.asStateFlow()
 
-    init { loadColleges() }
 
     init {
         loadColleges()
