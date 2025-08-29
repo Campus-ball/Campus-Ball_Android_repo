@@ -84,6 +84,10 @@ fun ComponentLookUpScreen(
         viewModel.fetchProposalDetail(clubId)
     }
 
+    LaunchedEffect(isMatchButtonClicked) {
+        matchViewModel.sendMatch(request = MatchSendRequest(cludId = clubId))
+    }
+
     if (isLoading) {
         CircularProgressIndicator()
     } else {
@@ -267,7 +271,6 @@ fun ComponentLookUpScreen(
             Spacer(Modifier.height(91.dp))
         }
         if (isMatchButtonClicked) {
-            matchViewModel.sendMatch(request = MatchSendRequest(cludId = clubId))
             SuccessModal(value = "친선 경기 신청에 성공하였습니다!", buttonValue = "홈화면으로 이동", onClick = {
                 navController.navigate(Route.Match.route)
             })

@@ -25,6 +25,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +48,7 @@ import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleCalend
 import com.konkuk.summerhackathon.presentation.schedule.component.ScheduleClubCard
 import com.konkuk.summerhackathon.presentation.schedule.viewmodel.CalendarViewModel
 import com.konkuk.summerhackathon.presentation.schedule.viewmodel.MatchViewModel
+import com.konkuk.summerhackathon.presentation.settings.viewmodel.SettingsViewModel
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallColors
 import com.konkuk.summerhackathon.ui.theme.defaultCampusBallTypography
 
@@ -58,15 +60,18 @@ fun ScheduleScreen(
     clubName: String = "KONKUK FC",
     navController: NavHostController,
     viewModel: CalendarViewModel = hiltViewModel(),
-    matchViewModel: MatchViewModel = hiltViewModel()
+    matchViewModel: MatchViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
 
     val events by viewModel.events.collectAsStateWithLifecycle()
     val matchEvents by matchViewModel.events.collectAsStateWithLifecycle()
+    val ui by settingsViewModel.ui.collectAsState()
 
 
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val isMatchLoading by matchViewModel.isLoading.collectAsStateWithLifecycle()
+    val isMyLoading by settingsViewModel.isLoading.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 
@@ -112,14 +117,12 @@ fun ScheduleScreen(
         )
     )
 
-
-
     LaunchedEffect(key1 = true) {
         viewModel.error.collect { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
-    if (isLoading || isMatchLoading) {
+    if (isLoading || isMatchLoading || isMyLoading) {
         CircularProgressIndicator()
     } else {
         Box(
@@ -149,7 +152,7 @@ fun ScheduleScreen(
             Spacer(Modifier.height(20.dp))
 
             Text(
-                text = clubName,
+                text = ui.club,
                 color = defaultCampusBallColors.likeblack,
                 style = defaultCampusBallTypography.SB_24
             )
